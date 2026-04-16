@@ -38,10 +38,10 @@ author:
   googlescholar    : "https://scholar.google.com/citations?user=tYR0X8UAAAAJ&hl=sv&oi=ao"
   inspire-hep      : # URL
   impactstory      : # URL
-  orcid            : ""
+  orcid            : # URL
   semantic         : # URL
   ssrn             : # URL
-  pubmed           : ""
+  pubmed           : # URL
   researchgate     : # URL
   scopus           : # URL
   zotero           : # URL
@@ -51,13 +51,13 @@ author:
   bitbucket        : # Username - Update with your username on the site
   codepen          : # Username
   dribbble         : # Username
-  github           : "karevernby"
+  github           : # Username
   kaggle           : # Username  
   stackoverflow    : # User number or user number and name (i.e., use "1" or "1/jeff-atwood")    
 
   # Social media
   artstation       : # Username
-  bluesky          : "" # Replace this with you Bluesky username
+  bluesky          : # Username
   facebook         : # Username
   flickr           : # Username
   foursquare       : # Username
