@@ -97,6 +97,17 @@
     background: var(--panel); border: 1px solid var(--line); border-radius: 4px; padding: .05em .35em;
   }
   .hidden { display: none; }
+  #printout { display: none; }
+  @media print {
+    body { background: #fff; color: #000; }
+    .wrap > *:not(#printout) { display: none !important; }
+    #printout { display: block !important; font-size: 12pt; }
+    #printout h1 { font-size: 18pt; margin-bottom: .2em; }
+    #printout table { border-collapse: collapse; width: 100%; margin-top: 1.2em; }
+    #printout th, #printout td { text-align: left; padding: 8px 6px; border-bottom: 1px solid #999; vertical-align: top; }
+    #printout th { width: 55%; font-weight: normal; }
+    #printout p { margin: .2em 0; }
+  }
 </style>
 </head>
 <body>
@@ -193,14 +204,18 @@
   <div class="summary done hidden" id="ok">
     <h3>File downloaded</h3>
     <p id="okname" style="margin:0 0 .8em"></p>
+    <p style="margin:0 0 .4em">For your own records, use <strong>Save a copy as PDF</strong> below to keep a readable summary of your choices.</p>
     <p style="margin:0 0 .4em">Upload this file to the Canvas assignment <strong>&ldquo;Preliminary platform&rdquo;</strong>. One submission per party is enough.</p>
     <p style="margin:1.2em 0 .2em; font-size:.88rem; color:var(--muted)">If the download did not work, copy this line instead and paste it into the Canvas comment box:</p>
     <code class="line" id="codeline"></code>
     <div class="actions">
       <button type="button" class="ghost" id="copy">Copy the line</button>
       <button type="button" class="ghost" id="again">Download again</button>
+      <button type="button" class="ghost" id="print">Save a copy as PDF</button>
     </div>
   </div>
+
+  <div id="printout"></div>
 
   <p class="foot">Nothing you type here is sent anywhere. The page builds the file in your browser, and you hand it in through Canvas.</p>
 </div>
@@ -278,6 +293,15 @@
     document.getElementById("okname").textContent = "Saved as " + name + " in your downloads folder.";
     document.getElementById("codeline").textContent =
       [f.sg.value, f.pa.value, ROUND, val("taxes"), val("eu"), val("carbon"), f.who.value.trim()].join(" | ");
+    var po = document.getElementById("printout");
+    var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]; }); };
+    po.innerHTML = "<h1>" + esc(document.querySelector("h1").textContent) + "</h1>" +
+      "<p>Seminar group " + esc(f.sg.value.slice(-1)) + ", Party " + esc(f.pa.value.slice(-1)) + "</p>" +
+      "<p>Submitted by " + esc(f.who.value.trim()) + ", " + esc(new Date(stamp).toLocaleString()) + "</p>" +
+      "<table>" + QS.map(function (q, i) {
+        return "<tr><th>" + "abc"[i] + ") " + esc(q[1]) + "</th><td><strong>" + esc(LABELS[val(q[0]) - 1]) + "</strong></td></tr>";
+      }).join("") + "</table>" +
+      "<p style='margin-top:1.4em'>File handed in on Canvas: " + esc(name) + "</p>";
     ok.classList.remove("hidden");
     ok.scrollIntoView({ behavior: "smooth", block: "center" });
   });
@@ -292,6 +316,7 @@
     setTimeout(function () { URL.revokeObjectURL(url); }, 2000);
   }
   document.getElementById("again").addEventListener("click", download);
+  document.getElementById("print").addEventListener("click", function () { window.print(); });
 
   document.getElementById("copy").addEventListener("click", function () {
     var t = document.getElementById("codeline").textContent;
