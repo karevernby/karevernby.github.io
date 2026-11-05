@@ -90,6 +90,12 @@
   }
   .actions { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; margin-top: 1.6em; }
   .foot { margin-top: 3.5em; padding-top: 1.4em; border-top: 1px solid var(--line); color: var(--muted); font-size: .85rem; }
+  ol.steps { margin: 0 0 2.4em; padding-left: 1.4em; }
+  ol.steps li { margin-bottom: .5em; padding-left: .25em; }
+  ol.steps code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: .86em;
+    background: var(--panel); border: 1px solid var(--line); border-radius: 4px; padding: .05em .35em;
+  }
   .hidden { display: none; }
 </style>
 </head>
@@ -100,7 +106,14 @@
   <p class="sub">Voters, Representatives, and Political Decision Making in Comparative Perspective<br>
   Assignment 1: The Election &middot; deadline <strong>10 November, 13:00</strong></p>
 
-  <p class="lede">This is the platform your party runs on in the election. You may keep the positions from your preliminary platform or change one or more of them after seeing what the other parties proposed. The written part of the assignment goes into the same Canvas assignment as a separate document.</p>
+  <p class="lede">This is the platform your party runs on in the election. You may keep the positions from your preliminary platform or change one or more of them after seeing what the other parties proposed.</p>
+
+  <h2>How to hand in</h2>
+  <ol class="steps">
+    <li>Agree on your party&rsquo;s final positions, then let one person fill in the form below.</li>
+    <li>Press <strong>Download file for Canvas</strong>. This does not hand anything in by itself: it saves a small file, for example <code>SG1_P3_fin.csv</code>, to your downloads folder.</li>
+    <li>Upload that file to the Canvas assignment <strong>&ldquo;Final written assignment&rdquo;</strong> before 10 November, 13:00, together with your party&rsquo;s written answers as a separate document. One upload per party is enough.</li>
+  </ol>
 
   <form id="f" novalidate>
     <div class="row">
@@ -127,7 +140,7 @@
 
     <div style="margin-top:16px">
       <label class="field" for="who">Submitted by (your name)</label>
-      <input type="text" id="who" name="who" autocomplete="name" placeholder="e.g. Anaïs Roman">
+      <input type="text" id="who" name="who" autocomplete="name" placeholder="Your full name">
     </div>
 
     <h2>Your party&rsquo;s positions</h2>
@@ -172,13 +185,13 @@
     <p class="err" id="err" role="alert"></p>
 
     <div class="actions">
-      <button type="submit" id="go">Create submission file</button>
+      <button type="submit" id="go">Download file for Canvas</button>
       <button type="button" class="ghost" id="reset">Clear form</button>
     </div>
   </form>
 
   <div class="summary done hidden" id="ok">
-    <h3>File created</h3>
+    <h3>File downloaded</h3>
     <p id="okname" style="margin:0 0 .8em"></p>
     <p style="margin:0 0 .4em">Upload this file to the Canvas assignment <strong>&ldquo;Final written assignment&rdquo;</strong>. One submission per party is enough.</p>
     <p style="margin:1.2em 0 .2em; font-size:.88rem; color:var(--muted)">If the download did not work, copy this line instead and paste it into the Canvas comment box:</p>
