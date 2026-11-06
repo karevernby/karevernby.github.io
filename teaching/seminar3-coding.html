@@ -1,0 +1,1044 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Coding sheet | Assignment 3</title>
+<style>
+  :root {
+    --ink: #1b1b1b;
+    --muted: #5e5e5e;
+    --bg: #ffffff;
+    --panel: #f7f7f5;
+    --line: #dfdfd9;
+    --accent: #2f6db5;
+    --accent-soft: #e8f0f9;
+    --ok: #2d6a4f;
+    --ok-soft: #e6f2ec;
+    --warn: #8a5a00;
+    --warn-line: #d9a321;
+    --bad: #b3261e;
+    --bad-soft: #fcebea;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ink: #e9e9e6; --muted: #a3a3a0; --bg: #16181a; --panel: #1e2124;
+      --line: #32363a; --accent: #7aa9e0; --accent-soft: #23303f; --ok: #74c69d; --ok-soft: #1b2e25;
+      --warn: #e3b341; --warn-line: #b8891d; --bad: #f2b8b5; --bad-soft: #3a2120;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ink: #e9e9e6; --muted: #a3a3a0; --bg: #16181a; --panel: #1e2124;
+    --line: #32363a; --accent: #7aa9e0; --accent-soft: #23303f; --ok: #74c69d; --ok-soft: #1b2e25;
+    --warn: #e3b341; --warn-line: #b8891d; --bad: #f2b8b5; --bad-soft: #3a2120;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 48px 16px 0; }
+  h1 { font-family: Georgia, "Times New Roman", serif; font-size: 1.75rem; line-height: 1.25; margin: 0 0 .15em; font-weight: 600; }
+  .sub { color: var(--muted); margin: 0 0 2em; font-size: .95rem; }
+  .sub strong { color: var(--ink); font-weight: 600; }
+  h2 { font-family: Georgia, "Times New Roman", serif; font-size: 1.1rem; margin: 2.2em 0 .8em; font-weight: 600; }
+  p { margin: 0 0 1em; }
+  a { color: var(--accent); }
+  .lede { border-left: 3px solid var(--accent); padding: .1em 0 .1em 1em; color: var(--muted); font-size: .95rem; }
+  ol.steps { margin: 0 0 1.4em; padding-left: 1.4em; }
+  ol.steps li { margin-bottom: .5em; padding-left: .25em; }
+  code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: .86em;
+    background: var(--panel); border: 1px solid var(--line); border-radius: 4px; padding: .05em .35em;
+  }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 560px) { .row { grid-template-columns: 1fr; } }
+  label.field { display: block; font-size: .88rem; color: var(--muted); margin-bottom: .35em; }
+  .login select, .login input {
+    width: 100%; padding: 10px 12px; font: inherit; font-size: .95rem; color: var(--ink);
+    background: var(--bg); border: 1px solid var(--line); border-radius: 8px;
+  }
+  .login select:focus, .login input:focus { outline: 2px solid var(--accent); outline-offset: 1px; border-color: var(--accent); }
+  .login input.code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; letter-spacing: .08em; text-transform: uppercase; }
+  button {
+    font: inherit; font-weight: 600; padding: 13px 26px; border-radius: 8px; cursor: pointer;
+    border: 1px solid var(--accent); background: var(--accent); color: #fff;
+  }
+  button:hover { filter: brightness(1.08); }
+  button:disabled { opacity: .55; cursor: default; filter: none; }
+  button.ghost { background: transparent; color: var(--accent); }
+  button.small { padding: 7px 14px; font-size: .88rem; }
+  button.link { background: none; border: 0; padding: 0; color: var(--accent); font-weight: 500; text-decoration: underline; font-size: inherit; }
+  .actions { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; margin-top: 1.4em; }
+  .err { color: var(--bad); font-size: .9rem; margin: .8em 0 0; min-height: 1.4em; }
+  .login { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 18px 20px 14px; }
+  .login .row + .row { margin-top: 14px; }
+
+  details.rules { border: 1px solid var(--line); border-radius: 10px; margin: 1.6em 0 0; }
+  details.rules > summary { cursor: pointer; padding: 13px 18px; font-weight: 600; list-style-position: inside; }
+  details.rules[open] > summary { border-bottom: 1px solid var(--line); }
+  .rulebody { padding: 4px 18px 16px; font-size: .93rem; }
+  .rulebody h3 { font-family: Georgia, "Times New Roman", serif; font-size: 1rem; margin: 1.3em 0 .5em; font-weight: 600; }
+  .rulebody ol, .rulebody ul { padding-left: 1.3em; margin: 0 0 1em; }
+  .rulebody li { margin-bottom: .45em; }
+  .rulebody .ex { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 10px 14px; margin: 0 0 .8em; }
+  .rulebody .ex p { margin: 0 0 .35em; }
+  .rulebody .ex p:last-child { margin: 0; }
+
+  .sheet { max-width: 1340px; margin: 0 auto; padding: 0 16px; }
+  .sheet[hidden] { display: none; }
+  .sheethead { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 14px; margin: 2.6em 0 .2em; }
+  .sheethead h2 { margin: 0; }
+  .sheethead .who { color: var(--muted); font-size: .92rem; }
+  .toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px; padding: 10px 0 12px; }
+  .prog { display: flex; align-items: center; gap: 10px; font-size: .92rem; font-weight: 600; }
+  .bar { width: 120px; height: 6px; background: var(--line); border-radius: 3px; overflow: hidden; }
+  .bar i { display: block; height: 100%; width: 0; background: var(--ok); transition: width .3s; }
+  .seg { display: inline-flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+  .seg button { background: transparent; color: var(--ink); border: 0; border-radius: 0; padding: 6px 12px; font-weight: 500; font-size: .86rem; }
+  .seg button + button { border-left: 1px solid var(--line); }
+  .seg button[aria-pressed="true"] { background: var(--accent-soft); font-weight: 600; }
+  .seg .c { color: var(--muted); font-weight: 400; margin-left: .3em; }
+  .status { font-size: .86rem; color: var(--muted); margin-left: auto; }
+  .status::before { content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 7px; background: var(--muted); vertical-align: 1px; }
+  .status.ok::before { background: var(--ok); }
+  .status.pending::before { background: var(--warn-line); }
+  .status.bad { color: var(--bad); }
+  .status.bad::before { background: var(--bad); }
+  .note { font-size: .86rem; color: var(--ok); min-height: 1.3em; margin: 0 0 .4em; }
+
+  .tablewrap {
+    border: 1px solid var(--line); border-radius: 10px; overflow: auto; background: var(--bg);
+    max-height: calc(100vh - 170px); max-height: calc(100dvh - 170px); min-height: 280px;
+  }
+  table.grid { border-collapse: separate; border-spacing: 0; width: 100%; min-width: 1140px; font-size: .9rem; }
+  .grid th, .grid td { border-bottom: 1px solid var(--line); padding: 6px 7px; vertical-align: top; text-align: left; }
+  .grid thead th {
+    position: sticky; top: 0; z-index: 2; background: var(--panel);
+    font-size: .78rem; line-height: 1.3; color: var(--muted); font-weight: 600; padding-top: 9px; padding-bottom: 9px;
+  }
+  .grid thead th small { display: block; font-weight: 400; }
+  .grid .n {
+    position: sticky; left: 0; z-index: 1; background: var(--bg); width: 40px;
+    color: var(--muted); text-align: right; font-variant-numeric: tabular-nums;
+    border-left: 4px solid transparent; padding-top: 11px;
+  }
+  .grid .member { position: sticky; left: 40px; z-index: 1; background: var(--bg); border-right: 1px solid var(--line); }
+  .grid thead .n, .grid thead .member { z-index: 3; background: var(--panel); }
+  tr[data-state="partial"] .n { border-left-color: var(--warn-line); }
+  tr[data-state="done"] .n { border-left-color: var(--ok); }
+  tr[data-state="check"] .n { border-left-color: var(--bad); }
+  .mname { font-weight: 600; line-height: 1.3; padding-top: 4px; }
+  .mmeta { color: var(--muted); font-size: .8rem; line-height: 1.35; margin-top: 2px; }
+  .badge { display: inline-block; font-size: .72rem; border: 1px solid var(--line); border-radius: 999px; padding: 0 7px; margin-top: 3px; }
+  .grid textarea, .grid input, .grid select {
+    display: block; width: 100%; font: inherit; font-size: .9rem; line-height: 1.4; color: var(--ink);
+    background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 5px 7px; margin: 0;
+  }
+  .grid textarea { resize: none; overflow: hidden; min-height: 33px; }
+  .grid select { padding-right: 2px; }
+  .grid textarea:focus, .grid input:focus, .grid select:focus { outline: 2px solid var(--accent); outline-offset: -1px; border-color: var(--accent); }
+  .grid tbody tr:hover td, .grid tbody tr:hover th { background-image: linear-gradient(var(--accent-soft), var(--accent-soft)); background-blend-mode: normal; }
+  .grid tbody tr:hover td.n, .grid tbody tr:hover th.member { background-image: linear-gradient(var(--accent-soft), var(--accent-soft)); }
+  .hint { font-size: .78rem; color: var(--warn); line-height: 1.35; margin-top: 4px; }
+  tr[data-state="check"] .hint { color: var(--bad); }
+  .saved { font-size: .78rem; color: var(--muted); line-height: 1.35; padding-top: 11px !important; white-space: pre-line; }
+  .saved.pending { color: var(--warn); }
+  .saved.bad { color: var(--bad); font-weight: 600; }
+  tr.conflict td { background: var(--bad-soft); border-bottom: 1px solid var(--line); padding: 10px 14px 12px 52px; font-size: .86rem; }
+  tr.conflict p { margin: 0 0 .5em; max-width: 900px; }
+  tr.conflict dl { display: grid; grid-template-columns: max-content 1fr; gap: .15em 1em; margin: 0 0 .7em; max-width: 900px; }
+  tr.conflict dt { color: var(--muted); }
+  tr.conflict dd { margin: 0; white-space: pre-wrap; }
+  tr.conflict .actions { margin-top: .2em; gap: 10px; }
+  .legend { font-size: .82rem; color: var(--muted); margin: .7em 0 0; }
+  .legend i { display: inline-block; width: 4px; height: 12px; vertical-align: -1px; margin: 0 5px 0 0; background: var(--line); }
+  .legend i.p { background: var(--warn-line); } .legend i.d { background: var(--ok); } .legend i.c { background: var(--bad); }
+  .after { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin: 1.4em 0 0; }
+  .dlnote { font-size: .9rem; margin: .8em 0 0; min-height: 1.4em; }
+  .foot { max-width: 720px; margin: 3.5em auto 0; padding: 1.4em 16px 80px; border-top: 1px solid var(--line); color: var(--muted); font-size: .85rem; }
+
+  dialog { width: min(760px, calc(100% - 32px)); max-height: calc(100vh - 48px); border: 1px solid var(--line); border-radius: 12px; padding: 0; background: var(--bg); color: var(--ink); }
+  dialog::backdrop { background: rgba(0, 0, 0, .4); }
+  .dlg-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 10px 14px 10px 18px; border-bottom: 1px solid var(--line); position: sticky; top: 0; background: var(--bg); }
+  .dlg-head strong { font-family: Georgia, "Times New Roman", serif; font-size: 1.05rem; }
+  @media (max-width: 560px) {
+    .wrap { padding-top: 32px; }
+    .status { margin-left: 0; width: 100%; }
+    .grid .member { position: static; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>The Social Class of Swedish MPs: Coding Sheet</h1>
+  <p class="sub">Voters, Representatives, and Political Decision Making in Comparative Perspective<br>
+  Assignment 3 &middot; deadline <strong>24 November, 13:00</strong></p>
+
+  <p class="lede">Your party codes its share of the members of the Riksdag 2022&ndash;2026 here. Everything you enter is saved for the whole party, so you can stop at any time, and the next person who opens the sheet sees what is done and carries on with the rest.</p>
+
+  <h2>How it works</h2>
+  <ol class="steps">
+    <li>Choose your seminar group and party, type your party&rsquo;s code (sent to your party in Canvas) and your initials, and press <strong>Open our sheet</strong>.</li>
+    <li>Code the members, following the coding rules below. A row is saved for your whole party a few seconds after you stop typing, and the sheet shows when it was saved and by whom. The page number next to each name opens the member&rsquo;s page in the book.</li>
+    <li>When every row is done, press <strong>Download CSV</strong> and upload the file, for example <code>SG1_P3_coding.csv</code>, to the Canvas assignment <strong>&ldquo;Seminar 3 - Assignment&rdquo;</strong> by 24 November, 13:00. One upload per party is enough.</li>
+  </ol>
+
+  <form class="login" id="login" novalidate>
+    <div class="row">
+      <div>
+        <label class="field" for="sg">Seminar group</label>
+        <select id="sg">
+          <option value="">Choose&hellip;</option>
+          <option value="SG1">Seminar group 1</option>
+          <option value="SG2">Seminar group 2</option>
+          <option value="TEACHER">Course teacher</option>
+        </select>
+      </div>
+      <div id="pawrap">
+        <label class="field" for="pa">Party</label>
+        <select id="pa">
+          <option value="">Choose&hellip;</option>
+          <option value="P1">Party 1</option>
+          <option value="P2">Party 2</option>
+          <option value="P3">Party 3</option>
+          <option value="P4">Party 4</option>
+          <option value="P5">Party 5</option>
+        </select>
+      </div>
+    </div>
+    <div class="row">
+      <div>
+        <label class="field" for="code">Party code</label>
+        <input type="text" id="code" class="code" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="20" placeholder="6 characters">
+      </div>
+      <div>
+        <label class="field" for="me">Your initials</label>
+        <input type="text" id="me" autocomplete="off" spellcheck="false" maxlength="12" placeholder="e.g. AB">
+      </div>
+    </div>
+    <div class="actions">
+      <button type="submit" id="open">Open our sheet</button>
+    </div>
+    <p class="err" id="err" role="alert"></p>
+  </form>
+
+  <details class="rules" id="rules">
+    <summary>Coding rules</summary>
+    <div class="rulebody" id="rulebody">
+      <p>Source: <a href="https://www.riksdagen.se/globalassets/03.-dokument-och-lagar/bestall-och-ladda-ner/informationsmaterial-och-bocker/fakta-om-folkvalda-2022-26-web.pdf" target="ffv" rel="noopener">Fakta om folkvalda &ndash; Riksdagen 2022&ndash;2026</a>. Each member has a short biography: an introductory paragraph with offices in the Riksdag, an italic title and date of birth, then the sections <em>Utbildning</em> (education), <em>Anställningar</em> (employment), <em>Kommunala uppdrag</em> (municipal and regional offices), <em>Uppdrag inom statliga myndigheter</em> (state boards), <em>Uppdrag inom förenings- och näringsliv</em> (associations, business, party posts) and <em>Skrifter i urval</em> (publications). Code from the book first. Use other public sources only when the book is silent or unclear, and always say so in the comment.</p>
+
+      <h3>Occupation</h3>
+      <p>We follow the rule of the Global Legislators Database (GLD), so that our figures can be compared with theirs: the occupation is the member&rsquo;s last full-time paid job that was not an elected office, held before the member&rsquo;s first paid elected office. The aim is to capture the member&rsquo;s social position before a political career could change it. Copy the job from the <em>Anställningar</em> section word for word, including employer and years, for example &ldquo;Chaufför, Swedlog, Helsingborg 13&ndash;14&rdquo;.</p>
+      <ol>
+        <li>Find the anchor: the year of the member&rsquo;s first paid elected office. In Sweden these are kommunalråd, oppositionsråd, regionråd or landstingsråd, borgarråd, riksdagsledamot and member of the European Parliament, plus paid full-time elected posts in a party or trade union (for example partiordförande or förbundsordförande). Ordinary seats in kommunfullmäktige, regionfullmäktige, nämnder and boards are not paid offices (they carry a fee, not a salary) and do not count as the anchor.</li>
+        <li>Use the <em>Anställningar</em> section to find the last job that began before the anchor year. Municipal, regional, state and association offices are not jobs and must not be used as the occupation.</li>
+        <li>Skip politically appointed jobs: politisk sekreterare, politiskt sakkunnig, statssekreterare, press secretary for a minister or party leader, political assistant to an MP or MEP, and similar posts to which a politician or a party group appoints people. If such a job is the last one before the anchor, go back to the job before it.</li>
+        <li>Regular employment by a party, a party organisation or a trade union is a job and is coded like any other (for example partiombudsman, kommunikatör at a party office, ombudsman at a union). Trade union jobs matter for the working-class rule below.</li>
+        <li>If the member entered the first paid elected office within three years of finishing their education, and the jobs before it were student jobs, summer jobs or part-time jobs alongside studies, write &ldquo;student&rdquo; as the occupation, leave ISCO and working class empty, and explain in the comment. If the member held a regular full-time job before the anchor, code that job even if it was short.</li>
+        <li>If several jobs are listed without years, take the one mentioned last before the anchor. If the book lists a string of occupations without years (for example &ldquo;Fastighetsförvaltare, säljare, restauratör, egen företagare&rdquo;), copy the whole string and code the ISCO from the last or most specific one; explain in the comment.</li>
+        <li>If there is no <em>Anställningar</em> section, or no job before the anchor can be identified, use the italic title if it is an occupation (for example &ldquo;Lärare&rdquo;, &ldquo;Jurist&rdquo;, &ldquo;Undersköterska&rdquo;) and write &ldquo;occupation from title&rdquo; in the comment. If the title is political (&ldquo;Riksdagsledamot&rdquo;, &ldquo;Kommunalråd&rdquo;, &ldquo;Politisk sekreterare&rdquo;) or missing, leave the occupation empty and write &ldquo;no job stated&rdquo; in the comment.</li>
+        <li>Note in the comment if the chosen job ended more than ten years before the anchor, or if the member went straight from a politically appointed job into elected office.</li>
+      </ol>
+
+      <h3>ISCO-08</h3>
+      <p>Give a three-digit ISCO-08 code (minor group), the level the GLD uses. If you cannot decide between minor groups, give two digits or one. For the working-class rule only the first digit matters, so you need not agonise over the last two. When a job is hard to place, use <a href="https://cascotweb.warwick.ac.uk/#/classification/isco08" target="_blank" rel="noopener">CascotWeb</a>, the tool the GLD used: translate the Swedish job title into English (truckförare &rarr; forklift driver, undersköterska &rarr; assistant nurse), type it in and take the best match. Note in the comment when the translation was uncertain. SCB&rsquo;s SSYK 2012 index also works, since SSYK 2012 follows ISCO-08.</p>
+      <p>Examples: forklift driver 834, lorry driver 833, undersköterska 532, nurse 222, preschool teacher, fritidspedagog or compulsory-school teacher 234, upper-secondary teacher 233, lawyer 261, economist or controller 241, engineer 214, journalist 264, communications officer 243, managing director 112, self-employed without a stated trade 112 or 143, department manager 12 (add the third digit if you can), head of unit in health care 134, school principal 134, police officer 541, military officer 011, farmer on own farm 613, farm worker 921, carpenter 711, electrician 741, welder 721, machine operator 81 (add the third digit if you can), process operator 313 or 81, warehouse worker 933, shop assistant 522, sales representative 332, office clerk 411, social worker 263, priest 263, researcher or doctoral student 231, trade union ombudsman 333 (but see the working-class rule). A student has no ISCO code.</p>
+
+      <h3>Working class (1/0)</h3>
+      <p>1 if the first digit of the ISCO code is 4, 5, 6, 7, 8 or 9; otherwise 0. Exceptions, following the GLD:</p>
+      <ul>
+        <li>A farmer or forest owner running their own farm (613 as owner) is 0. An employed farm worker is 1.</li>
+        <li>Police officers (541) and military personnel (major group 0) are 0.</li>
+        <li>Employees of a trade union (ombudsman, negotiator, union officer) are 1 whatever the ISCO code. Employees of a political party are coded by their ISCO code like everyone else.</li>
+        <li>A self-employed person whose trade is stated (for example &ldquo;egen företagare, snickare&rdquo; or &ldquo;frisör, egen salong&rdquo;) is coded by the trade (1); explain in the comment. &ldquo;Egen företagare&rdquo; without a trade is 112 or 143 and 0.</li>
+        <li>A supervisor or manager in a working-class trade (for example &ldquo;arbetsledare, bygg&rdquo;, &ldquo;butikschef&rdquo;, &ldquo;förman&rdquo;) belongs to major group 1 or 3 and is 0; explain in the comment.</li>
+        <li>If the occupation is empty or &ldquo;student&rdquo;, leave working class empty.</li>
+      </ul>
+      <p>The sheet flags rows where the working-class code departs from the first ISCO digit, until the comment explains why.</p>
+
+      <h3>Comment and coder</h3>
+      <p>Write a short note, in English, on every judgement that was not obvious: which office you used as the anchor, a choice between several jobs, politically appointed jobs you skipped, the student rule, an uncertain ISCO code, an ambiguous title, a source other than the book. Leave it empty when everything was clear. Be concrete (&ldquo;chose X over Y because &hellip;&rdquo;). The coder column holds the initials of the party member who coded the row; the sheet fills in yours when you code an empty row.</p>
+
+      <h3>Three worked examples</h3>
+      <div class="ex">
+        <p><strong>Andersson Garpvall, Pontus (SD)</strong>, PDF page 15. Title &ldquo;Politisk sekreterare&rdquo;. Anställningar: Truckförare 07&ndash;13, Truckförare 13, Chaufför Swedlog 13&ndash;14, Politisk sekreterare 15&ndash;18 and 18&ndash;21. Kommunala uppdrag: kommunfullmäktige and nämnd seats from 2013 (unpaid), no kommunalråd post. Riksdag from 2021.</p>
+        <p>&rarr; Occupation &ldquo;Chaufför, Swedlog, Helsingborg 13&ndash;14&rdquo;; ISCO 833; working class 1; comment &ldquo;Anchor Riksdag 2021. Skipped politisk sekreterare 15&ndash;21 (political appointment).&rdquo;</p>
+      </div>
+      <div class="ex">
+        <p><strong>Andersson Tay, Andrea (V)</strong>, PDF page 15. Title &ldquo;Humanekolog&rdquo;. Anställningar: Utbildningsledare Jordens Vänner 15&ndash;16, Verksamhetsutvecklare Fältbiologerna 16&ndash;17, Politisk sekreterare V 17&ndash;22. Kommunala uppdrag: ersättare in a nämnd 21&ndash;22 (unpaid). Riksdag from 2022.</p>
+        <p>&rarr; Occupation &ldquo;Verksamhetsutvecklare, Fältbiologerna 16&ndash;17&rdquo;; ISCO 242 (or 333); working class 0; comment &ldquo;Anchor Riksdag 2022. Skipped politisk sekreterare 17&ndash;22 (political appointment). ISCO uncertain (non-profit organisation).&rdquo;</p>
+      </div>
+      <div class="ex">
+        <p><strong>Rosencrantz, Jessica (M)</strong>, PDF page 168. Anställningar: Servitris, McDonalds 04&ndash;06; Servitris, A-concept 06; Marknadsassistent, Netigate 06&ndash;07; Landstingsrådssekreterare 07&ndash;09; Administrativ assistent, Handelshögskolan 09; Politisk assistent, Europaparlamentet 09&ndash;10. Degree from Handelshögskolan 2011. Kommunfullmäktige Täby 06&ndash;10 (unpaid). Riksdag from 2010.</p>
+        <p>&rarr; Occupation &ldquo;student&rdquo;; ISCO and working class empty; comment &ldquo;Anchor Riksdag 2010, while still a student (degree 2011). Jobs before 2010 were student jobs and political appointments (landstingsrådssekreterare, politisk assistent), so coded student per the GLD rule.&rdquo;</p>
+      </div>
+
+      <h3>Other public sources, in order of preference</h3>
+      <ol>
+        <li>riksdagen.se, the member&rsquo;s page (the same biography as the book, sometimes updated).</li>
+        <li><a href="https://valkompass.svt.se/2022/svar/riksdag" target="_blank" rel="noopener">SVT Valkompass 2022</a>, where candidates describe their own occupation.</li>
+        <li>The party&rsquo;s or party district&rsquo;s presentation of the member.</li>
+        <li>Swedish Wikipedia, but only facts with a reference.</li>
+        <li>Local press from the time the member was first elected.</li>
+      </ol>
+      <p>Use only public sources. Do not use commercial people-search sites or LinkedIn. Write the source in the comment. If sources disagree, the book takes precedence; note the discrepancy.</p>
+    </div>
+  </details>
+</div>
+
+<section class="sheet" id="sheet" hidden>
+  <div class="sheethead">
+    <h2 id="sheettitle">Your party&rsquo;s members</h2>
+    <span class="who" id="who"></span>
+    <button type="button" class="link" id="change">Change</button>
+  </div>
+  <div class="toolbar">
+    <div class="prog"><span id="prog">0 of 0 done</span><span class="bar" aria-hidden="true"><i id="bar"></i></span></div>
+    <div class="seg" role="group" aria-label="Show rows">
+      <button type="button" data-filter="all" aria-pressed="true">All<span class="c" id="c-all"></span></button>
+      <button type="button" data-filter="todo" aria-pressed="false">To do<span class="c" id="c-todo"></span></button>
+      <button type="button" data-filter="done" aria-pressed="false">Done<span class="c" id="c-done"></span></button>
+    </div>
+    <button type="button" class="ghost small" id="showrules">Coding rules</button>
+    <button type="button" class="ghost small" id="refresh">Refresh</button>
+    <span class="status" id="status" aria-live="polite"></span>
+  </div>
+  <p class="note" id="note" aria-live="polite"></p>
+  <div class="tablewrap">
+    <table class="grid" id="grid">
+      <colgroup>
+        <col style="width:40px"><col style="width:214px"><col style="width:262px"><col style="width:74px">
+        <col style="width:82px"><col style="width:290px"><col style="width:66px"><col style="width:112px">
+      </colgroup>
+      <thead>
+        <tr>
+          <th class="n" scope="col">#</th>
+          <th class="member" scope="col">Member<small>party &middot; constituency &middot; page in the PDF</small></th>
+          <th scope="col">Occupation<small>last paid non-elected job before the first paid elected office, as in the book</small></th>
+          <th scope="col">ISCO-08<small>3 digits</small></th>
+          <th scope="col">Working class<small>1 or 0</small></th>
+          <th scope="col">Comment<small>in English</small></th>
+          <th scope="col">Coder<small>initials</small></th>
+          <th scope="col">Saved</th>
+        </tr>
+      </thead>
+      <tbody id="rows"></tbody>
+    </table>
+  </div>
+  <p class="legend"><i></i>not started &nbsp; <i class="p"></i>started &nbsp; <i class="d"></i>done &nbsp; <i class="c"></i>check the note in the row. A row is done when it has an occupation, an ISCO code and working class; or &ldquo;student&rdquo;; or an empty occupation explained in the comment. Press Enter to move down a row and Shift+Enter for a new line in a comment.</p>
+  <div class="after">
+    <button type="button" id="download">Download CSV</button>
+  </div>
+  <p class="dlnote" id="dlnote" aria-live="polite"></p>
+</section>
+
+<p class="foot">The codings and the initials you type are saved in a Google Sheet that belongs to the course teacher, and nothing else is collected. Until a change is saved, this browser also keeps a copy of it, so you do not lose it if the connection drops.</p>
+
+<dialog id="dlg" aria-labelledby="dlgtitle">
+  <div class="dlg-head"><strong id="dlgtitle">Coding rules</strong><button type="button" class="ghost small" id="dlgclose">Close</button></div>
+  <div class="rulebody" id="dlgbody"></div>
+</dialog>
+
+<script>
+(function () {
+  "use strict";
+
+  // Web app URL of the Apps Script attached to the course Google Sheet (ends in /exec).
+  var ENDPOINT = "https://script.google.com/macros/s/AKfycbx0TWapKH8y6_daMUrwvBlFUaqdU4H3dsbmCmGAVYvMaJ2Ggbet_66UHbKMn6U4v1lZAA/exec";
+
+  var BOOK = "https://www.riksdagen.se/globalassets/03.-dokument-och-lagar/bestall-och-ladda-ner/informationsmaterial-och-bocker/fakta-om-folkvalda-2022-26-web.pdf";
+  var CANVAS_ASSIGNMENT = "Seminar 3 - Assignment";
+  var FIELDS = ["occupation", "isco08", "working_class", "comment", "coder"];
+  var MAXLEN = { occupation: 300, comment: 1500, coder: 40 };
+  var LOGIN_KEY = "s3coding-login";
+  var DRAFT_KEY = "s3coding-draft-";
+  var POLL_ACTIVE = 60000, POLL_IDLE = 300000, IDLE_AFTER = 600000;
+
+  try {
+    var q = new URLSearchParams(location.search);
+    if (/^(localhost|127\.0\.0\.1)$/.test(location.hostname) && q.get("endpoint")) ENDPOINT = q.get("endpoint");
+  } catch (e) {}
+
+  function $(id) { return document.getElementById(id); }
+  var S = {
+    group: "", code: "", me: "", rows: [], byId: {},
+    inflight: null, refreshing: false, failures: 0, epoch: 0,
+    lastRefresh: 0, lastSync: null, lastActivity: Date.now(), filter: "all", saveTimer: null, opening: false
+  };
+
+  // ---------- values ----------
+  function clean(f, v) {
+    var s = v === null || v === undefined ? "" : String(v);
+    if (f === "isco08") return s.replace(/\D/g, "").slice(0, 4);
+    if (f === "working_class") { s = s.trim(); return s === "0" || s === "1" ? s : ""; }
+    if (f === "comment") s = s.replace(/\r\n?/g, "\n").replace(/[\u0000-\u0009\u000b-\u001f\u007f]/g, " ");
+    else s = s.replace(/[\u0000-\u001f\u007f]/g, " ");
+    return s.trim().slice(0, MAXLEN[f] || 300);
+  }
+  function pick(o) {
+    var r = {};
+    FIELDS.forEach(function (f) { r[f] = o && o[f] !== undefined && o[f] !== null ? String(o[f]) : ""; });
+    return r;
+  }
+  function pickAll(o) {
+    var r = pick(o);
+    r.saved_at = o && o.saved_at ? String(o.saved_at) : "";
+    r.saved_by = o && o.saved_by ? String(o.saved_by) : "";
+    return r;
+  }
+  function same(a, b) { return FIELDS.every(function (f) { return clean(f, a && a[f]) === clean(f, b && b[f]); }); }
+  function sameAll(a, b) { return same(a, b) && (a.saved_at || "") === (b.saved_at || "") && (a.saved_by || "") === (b.saved_by || ""); }
+
+  function hint(v) {
+    var occ = clean("occupation", v.occupation), isco = clean("isco08", v.isco08),
+        wc = clean("working_class", v.working_class), com = clean("comment", v.comment);
+    if (/^student\b/i.test(occ) && (isco || wc)) return "For a student, leave ISCO and working class empty.";
+    if (!occ && (isco || wc)) return "Fill in the occupation, or leave ISCO and working class empty and write “no job stated” here.";
+    if (isco && wc && !com) {
+      var d = isco.charAt(0);
+      if ("456789".indexOf(d) >= 0 && wc === "0") return "ISCO " + d + " usually means working class 1. If 0 is right, say why here.";
+      if ("0123".indexOf(d) >= 0 && wc === "1") return "ISCO " + d + " usually means working class 0. If 1 is right (for example a trade union employee), say why here.";
+    }
+    return "";
+  }
+  function state(v) {
+    var occ = clean("occupation", v.occupation), isco = clean("isco08", v.isco08),
+        wc = clean("working_class", v.working_class), com = clean("comment", v.comment);
+    if (!occ && !isco && !wc && !com) return "todo";
+    if (hint(v)) return "check";
+    if (/^student\b/i.test(occ)) return "done";
+    if (!occ) return com ? "done" : "partial";
+    return isco && wc ? "done" : "partial";
+  }
+
+  function when(iso) {
+    var d = new Date(iso);
+    if (!iso || isNaN(d.getTime())) return "";
+    var t = d.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
+    if (d.toDateString() === new Date().toDateString()) return "today " + t;
+    return d.toLocaleDateString("en-GB", { day: "numeric", month: "short" }) + " " + t;
+  }
+  function clock(d) { return d.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" }); }
+
+  // ---------- server ----------
+  function call(url, opts, ms) {
+    var ctl = typeof AbortController === "function" ? new AbortController() : null;
+    var timer = ctl ? setTimeout(function () { ctl.abort(); }, ms) : null;
+    if (ctl) opts.signal = ctl.signal;
+    return fetch(url, opts).then(function (res) {
+      if (!res.ok) throw new Error("http_" + res.status);
+      return res.json();
+    }).then(function (data) {
+      if (timer) clearTimeout(timer);
+      if (!data || data.ok !== true) throw new Error((data && data.error) || "bad_response");
+      return data;
+    }, function (err) {
+      if (timer) clearTimeout(timer);
+      throw err;
+    });
+  }
+  function load(group, code) {
+    return call(ENDPOINT + "?action=load&group=" + encodeURIComponent(group) + "&code=" + encodeURIComponent(code),
+                { method: "GET", cache: "no-store" }, 25000);
+  }
+  function post(body, keepalive) {
+    var opts = { method: "POST", body: JSON.stringify(body) };
+    if (keepalive) opts.keepalive = true;
+    return call(ENDPOINT, opts, 30000);
+  }
+  function explain(err) {
+    var m = String((err && err.message) || err);
+    if (m === "wrong_code") return "That code does not match " + label(S.pendingGroup || S.group) + ". Check the code your party received in Canvas.";
+    if (m === "bad_group") return "Choose your seminar group and party.";
+    if (m === "busy") return "The sheet is busy. Try again in a moment.";
+    if (m === "AbortError" || /abort|network|fetch|load failed|http_/i.test(m)) return "Could not reach the coding sheet. Check your connection and try again in a minute.";
+    return "Something went wrong (" + m + "). Try again in a minute, and tell your teacher if it keeps happening.";
+  }
+  function label(g) {
+    if (g === "TEACHER") return "Course teacher";
+    var m = /^SG([12])_P([1-5])$/.exec(g || "");
+    return m ? "Seminar group " + m[1] + ", Party " + m[2] : "your party";
+  }
+
+  // ---------- drafts kept in this browser ----------
+  function readDrafts() {
+    try { return JSON.parse(localStorage.getItem(DRAFT_KEY + S.group) || "{}") || {}; } catch (e) { return {}; }
+  }
+  function writeDrafts(d) {
+    try {
+      if (Object.keys(d).length) localStorage.setItem(DRAFT_KEY + S.group, JSON.stringify(d));
+      else localStorage.removeItem(DRAFT_KEY + S.group);
+    } catch (e) {}
+  }
+  function keepDraft(row) {
+    var d = readDrafts();
+    d[row.id] = { base: pick(row.server), local: pick(row.local), t: Date.now() };
+    writeDrafts(d);
+  }
+  function dropDraft(row) {
+    var d = readDrafts();
+    if (d[row.id]) { delete d[row.id]; writeDrafts(d); }
+  }
+
+  // ---------- table ----------
+  var tbody = $("rows");
+
+  function el(tag, cls, text) {
+    var e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (text !== undefined) e.textContent = text;
+    return e;
+  }
+  function autosize(t) { t.style.height = "auto"; t.style.height = t.scrollHeight + 2 + "px"; }
+
+  function buildRow(r, i) {
+    var row = {
+      id: String(r.id), name: r.name || "", party: r.party || "", constituency: r.constituency || "",
+      seat: r.seat || "", pdf_page: r.pdf_page || "", member_type: r.member_type || "",
+      server: pickAll(r), local: pick(r), dirty: false, seq: 0, sending: false, conflict: null,
+      inputs: {}, ctr: null
+    };
+    var tr = el("tr");
+    tr.dataset.id = row.id;
+    tr.appendChild(el("td", "n", String(i + 1)));
+
+    var th = el("th", "member");
+    th.scope = "row";
+    th.appendChild(el("div", "mname", row.name));
+    var meta = el("div", "mmeta");
+    meta.appendChild(document.createTextNode((row.party === "-" ? "independent" : row.party) + " · " + row.constituency + " · "));
+    var a = el("a", "", "p. " + row.pdf_page);
+    a.href = BOOK + "#page=" + encodeURIComponent(row.pdf_page);
+    a.target = "ffv";
+    a.rel = "noopener";
+    a.title = "Open page " + row.pdf_page + " of the book";
+    meta.appendChild(a);
+    th.appendChild(meta);
+    if (/substitute/i.test(row.member_type)) {
+      var b = el("span", "badge", "substitute");
+      b.title = "Substitute who shares seat " + row.seat + " with another member";
+      th.appendChild(b);
+    }
+    tr.appendChild(th);
+
+    function cell(f, node) {
+      node.dataset.f = f;
+      node.setAttribute("aria-label", { occupation: "Occupation", isco08: "ISCO-08", working_class: "Working class", comment: "Comment", coder: "Coder" }[f] + ", " + row.name);
+      row.inputs[f] = node;
+      var td = el("td");
+      td.appendChild(node);
+      tr.appendChild(td);
+      return td;
+    }
+    var occ = el("textarea"); occ.rows = 1; occ.maxLength = MAXLEN.occupation;
+    cell("occupation", occ);
+    var isco = el("input"); isco.type = "text"; isco.inputMode = "numeric"; isco.maxLength = 4; isco.autocomplete = "off";
+    cell("isco08", isco);
+    var wc = el("select");
+    [["", "–"], ["1", "1"], ["0", "0"]].forEach(function (o) { var op = el("option", "", o[1]); op.value = o[0]; wc.appendChild(op); });
+    cell("working_class", wc);
+    var com = el("textarea"); com.rows = 1; com.maxLength = MAXLEN.comment;
+    var tdc = cell("comment", com);
+    row.hintEl = el("div", "hint");
+    row.hintEl.hidden = true;
+    tdc.appendChild(row.hintEl);
+    var cod = el("input"); cod.type = "text"; cod.maxLength = MAXLEN.coder; cod.autocomplete = "off"; cod.spellcheck = false;
+    cell("coder", cod);
+    row.savedEl = el("td", "saved");
+    tr.appendChild(row.savedEl);
+
+    row.tr = tr;
+    setInputs(row);
+    return row;
+  }
+
+  function setInputs(row) {
+    FIELDS.forEach(function (f) {
+      var node = row.inputs[f];
+      if (node.value !== row.local[f]) node.value = row.local[f];
+      if (node.tagName === "TEXTAREA") autosize(node);
+    });
+  }
+
+  function paintRow(row) {
+    row.tr.dataset.state = state(row.local);
+    var h = hint(row.local);
+    row.hintEl.textContent = h;
+    row.hintEl.hidden = !h;
+    var cls = "saved", txt = "";
+    if (row.conflict) { txt = "Needs your decision"; cls += " bad"; }
+    else if (row.sending) { txt = "Saving…"; cls += " pending"; }
+    else if (row.dirty) { txt = S.failures ? "Not saved yet (no connection)" : "Not saved yet"; cls += " pending"; }
+    else if (row.server.saved_at) txt = "Saved " + when(row.server.saved_at) + (row.server.saved_by ? "\nby " + row.server.saved_by : "");
+    row.savedEl.className = cls;
+    row.savedEl.textContent = txt;
+  }
+
+  function paintToolbar() {
+    var n = S.rows.length, done = 0, waiting = 0, conflicts = 0;
+    S.rows.forEach(function (r) {
+      if (state(r.local) === "done") done++;
+      if (r.conflict) conflicts++;
+      else if (r.dirty) waiting++;
+    });
+    $("prog").textContent = done + " of " + n + " done";
+    $("bar").style.width = (n ? (100 * done / n) : 0) + "%";
+    $("c-all").textContent = n;
+    $("c-todo").textContent = n - done;
+    $("c-done").textContent = done;
+    var msg, cls;
+    if (conflicts) { msg = conflicts === 1 ? "1 row needs your decision" : conflicts + " rows need your decision"; cls = "bad"; }
+    else if (S.failures && waiting) { msg = "No connection. Your changes are kept in this browser and will be saved when the connection is back."; cls = "bad"; }
+    else if (S.inflight) { msg = "Saving…"; cls = "pending"; }
+    else if (waiting) { msg = waiting === 1 ? "1 change waiting to be saved" : waiting + " changes waiting to be saved"; cls = "pending"; }
+    else { msg = "All changes saved" + (S.lastSync ? " · checked " + clock(S.lastSync) : ""); cls = "ok"; }
+    var st = $("status");
+    st.textContent = msg;
+    st.className = "status " + cls;
+  }
+
+  function applyFilter() {
+    S.rows.forEach(function (r) {
+      var st = state(r.local);
+      var show = S.filter === "all" || r.conflict || (S.filter === "done" ? st === "done" : st !== "done");
+      r.tr.hidden = !show;
+      if (r.ctr) r.ctr.hidden = !show;
+    });
+    Array.prototype.forEach.call(document.querySelectorAll(".seg button"), function (b) {
+      b.setAttribute("aria-pressed", String(b.dataset.filter === S.filter));
+    });
+  }
+
+  function renderConflict(row) {
+    if (!row.tr.parentNode) return;
+    if (!row.conflict) {
+      if (row.ctr) { row.ctr.parentNode.removeChild(row.ctr); row.ctr = null; }
+      return;
+    }
+    if (!row.ctr) {
+      row.ctr = el("tr", "conflict");
+      var td0 = el("td");
+      td0.colSpan = 8;
+      row.ctr.appendChild(td0);
+      row.tr.parentNode.insertBefore(row.ctr, row.tr.nextSibling);
+    }
+    var td = row.ctr.firstChild, t = row.conflict.theirs;
+    td.textContent = "";
+    var who = t.saved_by || "Someone in your party";
+    var p = el("p");
+    p.appendChild(el("strong", "", row.name + ": "));
+    p.appendChild(document.createTextNode(row.conflict.restored
+      ? "this browser kept a change you made that was never saved, and " + who + " has saved this row since (" + when(t.saved_at) + "). Your version is in the row above. Theirs:"
+      : who + " saved this row " + when(t.saved_at) + " while your change was waiting to be saved. Your version is in the row above. Theirs:"));
+    td.appendChild(p);
+    var dl = el("dl");
+    [["Occupation", t.occupation], ["ISCO-08", t.isco08], ["Working class", t.working_class], ["Comment", t.comment], ["Coder", t.coder]].forEach(function (x) {
+      dl.appendChild(el("dt", "", x[0]));
+      dl.appendChild(el("dd", "", x[1] || "–"));
+    });
+    td.appendChild(dl);
+    var act = el("div", "actions");
+    var mine = el("button", "small", "Keep mine");
+    mine.type = "button";
+    mine.addEventListener("click", function () {
+      row.conflict = null;
+      row.dirty = true;
+      row.seq++;
+      keepDraft(row);
+      renderConflict(row);
+      paintRow(row);
+      paintToolbar();
+      scheduleSave(100);
+    });
+    var theirs = el("button", "ghost small", "Use theirs");
+    theirs.type = "button";
+    theirs.addEventListener("click", function () {
+      row.conflict = null;
+      row.local = pick(row.server);
+      row.dirty = false;
+      row.seq++;
+      setInputs(row);
+      dropDraft(row);
+      renderConflict(row);
+      paintRow(row);
+      paintToolbar();
+    });
+    act.appendChild(mine);
+    act.appendChild(theirs);
+    td.appendChild(act);
+  }
+
+  function rowOf(node) {
+    var tr = node && node.closest ? node.closest("tr") : null;
+    return tr && tr.dataset.id ? S.byId[tr.dataset.id] : null;
+  }
+
+  function onEdit(node) {
+    var row = rowOf(node), f = node.dataset.f;
+    if (!row || !f) return;
+    var v = node.value;
+    if (f === "isco08") {
+      var c = v.replace(/\D/g, "").slice(0, 4);
+      if (c !== v) { node.value = c; v = c; }
+    }
+    if (node.tagName === "TEXTAREA") autosize(node);
+    if (row.local[f] === v) return;
+    row.local[f] = v;
+    if (f !== "coder") {
+      var empty = !clean("occupation", row.local.occupation) && !clean("isco08", row.local.isco08) &&
+                  !clean("working_class", row.local.working_class) && !clean("comment", row.local.comment);
+      if (!empty && !clean("coder", row.local.coder) && S.me) {
+        row.local.coder = S.me;
+        row.inputs.coder.value = S.me;
+      } else if (empty && row.local.coder === S.me && !clean("coder", row.server.coder)) {
+        row.local.coder = "";
+        row.inputs.coder.value = "";
+      }
+    }
+    row.dirty = !same(row.local, row.server) || !!row.conflict;
+    row.seq++;
+    S.lastActivity = Date.now();
+    if (row.dirty) keepDraft(row); else dropDraft(row);
+    paintRow(row);
+    paintToolbar();
+    if (row.dirty) scheduleSave(3000);
+  }
+
+  tbody.addEventListener("input", function (e) { onEdit(e.target); });
+  tbody.addEventListener("change", function (e) { onEdit(e.target); });
+  tbody.addEventListener("focusout", function (e) {
+    var row = rowOf(e.target);
+    if (row && row.dirty && rowOf(e.relatedTarget) !== row) scheduleSave(150);
+  });
+  tbody.addEventListener("focusin", function () { S.lastActivity = Date.now(); });
+  tbody.addEventListener("keydown", function (e) {
+    var t = e.target;
+    if (e.key !== "Enter" || e.isComposing || !t.dataset || !t.dataset.f) return;
+    if (t.tagName === "TEXTAREA" && (e.shiftKey || e.altKey)) return;
+    e.preventDefault();
+    var vis = S.rows.filter(function (r) { return !r.tr.hidden; });
+    var i = vis.indexOf(rowOf(t));
+    var next = vis[i + (e.shiftKey ? -1 : 1)];
+    if (next) next.inputs[t.dataset.f].focus();
+  });
+
+  // ---------- saving ----------
+  function scheduleSave(ms) {
+    clearTimeout(S.saveTimer);
+    S.saveTimer = setTimeout(function () { flush(false); }, ms);
+  }
+
+  function flush(keepalive) {
+    clearTimeout(S.saveTimer);
+    S.saveTimer = null;
+    if (S.inflight) return S.inflight.then(function () { return flush(keepalive); });
+    var batch = S.rows.filter(function (r) { return r.dirty && !r.conflict; });
+    if (!batch.length || !S.group) { paintToolbar(); return Promise.resolve(); }
+    var sent = batch.map(function (r) { return { row: r, values: pick(r.local), base: pick(r.server) }; });
+    sent.forEach(function (s) { s.row.sending = true; paintRow(s.row); });
+    var body = {
+      action: "save", group: S.group, code: S.code, me: S.me,
+      rows: sent.map(function (s) { return { id: s.row.id, base: s.base, values: s.values }; })
+    };
+    var p = post(body, keepalive).then(function (res) {
+      S.failures = 0;
+      S.lastSync = new Date();
+      S.epoch++;
+      (res.results || []).forEach(function (result) {
+        var s = sent.filter(function (x) { return x.row.id === String(result.id); })[0];
+        if (!s) return;
+        var row = s.row;
+        if (result.status === "saved" || result.status === "unchanged") {
+          row.server = pickAll(result.row);
+          row.dirty = !same(row.local, row.server);
+          if (row.dirty) keepDraft(row); else dropDraft(row);
+        } else if (result.status === "conflict") {
+          row.server = pickAll(result.row);
+          if (same(row.local, row.server)) { row.dirty = false; row.conflict = null; dropDraft(row); }
+          else { row.conflict = { theirs: pickAll(result.row) }; row.dirty = true; keepDraft(row); }
+        } else {
+          row.dirty = false;
+          dropDraft(row);
+        }
+      });
+    }, function (err) {
+      if (String(err && err.message) === "wrong_code") { lockOut(); return; }
+      S.failures++;
+    }).then(function () {
+      S.inflight = null;
+      sent.forEach(function (s) { s.row.sending = false; renderConflict(s.row); paintRow(s.row); });
+      paintToolbar();
+      if (S.group && S.rows.some(function (r) { return r.dirty && !r.conflict; })) {
+        scheduleSave(S.failures ? Math.min(30000, 4000 * S.failures) : 1500);
+      }
+    });
+    S.inflight = p;
+    paintToolbar();
+    return p;
+  }
+
+  function settle(tries) {
+    tries = tries || 0;
+    return flush(false).then(function () {
+      var waiting = S.rows.some(function (r) { return r.dirty && !r.conflict; });
+      if (waiting && !S.failures && tries < 3) return settle(tries + 1);
+    });
+  }
+
+  // ---------- refreshing ----------
+  function refresh(showNote) {
+    if (!S.group || S.refreshing) return Promise.resolve();
+    S.refreshing = true;
+    S.lastRefresh = Date.now();
+    var epoch = S.epoch, group = S.group;
+    return load(S.group, S.code).then(function (res) {
+      if (group !== S.group) return;
+      S.lastSync = new Date();
+      if (S.failures) { S.failures = 0; if (S.rows.some(function (r) { return r.dirty && !r.conflict; })) scheduleSave(300); }
+      if (epoch !== S.epoch || S.inflight) return;
+      var changed = 0;
+      (res.rows || []).forEach(function (srv) {
+        var row = S.byId[String(srv.id)];
+        if (!row || row.dirty || row.conflict || row.sending) return;
+        var sv = pickAll(srv);
+        if (!sameAll(row.server, sv)) {
+          row.server = sv;
+          row.local = pick(sv);
+          setInputs(row);
+          paintRow(row);
+          changed++;
+        }
+      });
+      if (changed) note(changed === 1 ? "1 row was updated by your party." : changed + " rows were updated by your party.");
+      else if (showNote) note("Up to date.");
+    }, function (err) {
+      if (String(err && err.message) === "wrong_code") lockOut();
+    }).then(function () {
+      S.refreshing = false;
+      paintToolbar();
+    });
+  }
+
+  var noteTimer = null;
+  function note(t) {
+    $("note").textContent = t;
+    clearTimeout(noteTimer);
+    noteTimer = setTimeout(function () { $("note").textContent = ""; }, 6000);
+  }
+
+  setInterval(function () {
+    if (!S.group || document.hidden) return;
+    var idle = Date.now() - S.lastActivity > IDLE_AFTER;
+    if (Date.now() - S.lastRefresh >= (idle ? POLL_IDLE : POLL_ACTIVE)) refresh(false);
+  }, 15000);
+
+  document.addEventListener("visibilitychange", function () {
+    if (!S.group) return;
+    if (document.visibilityState === "hidden") {
+      if (S.rows.some(function (r) { return r.dirty && !r.conflict; })) flush(false);
+    } else if (Date.now() - S.lastRefresh > 20000) {
+      refresh(false);
+    }
+  });
+  window.addEventListener("pagehide", function () {
+    if (S.group && !S.inflight && S.rows.some(function (r) { return r.dirty && !r.conflict; })) flush(true);
+  });
+  window.addEventListener("beforeunload", function (e) {
+    if (S.inflight || S.rows.some(function (r) { return r.dirty; })) { e.preventDefault(); e.returnValue = ""; }
+  });
+
+  // ---------- opening a party's sheet ----------
+  var form = $("login"), err = $("err"), openBtn = $("open");
+
+  function readLogin() {
+    try { return JSON.parse(localStorage.getItem(LOGIN_KEY) || "{}") || {}; } catch (e) { return {}; }
+  }
+  function saveLogin(d) { try { localStorage.setItem(LOGIN_KEY, JSON.stringify(d)); } catch (e) {} }
+
+  function openSheet(group, code, me, quiet) {
+    if (S.opening) return;
+    S.opening = true;
+    S.pendingGroup = group;
+    err.textContent = "";
+    openBtn.disabled = true;
+    openBtn.textContent = "Opening…";
+    load(group, code).then(function (res) {
+      S.group = group; S.code = code; S.me = me;
+      S.rows = []; S.byId = {}; S.failures = 0; S.epoch++;
+      tbody.textContent = "";
+      (res.rows || []).forEach(function (r, i) {
+        var row = buildRow(r, i);
+        S.rows.push(row);
+        S.byId[row.id] = row;
+        tbody.appendChild(row.tr);
+      });
+      $("sheettitle").textContent = label(group);
+      $("who").textContent = "coding as " + me;
+      $("sheet").hidden = false;
+      form.hidden = true;
+      S.lastRefresh = Date.now();
+      S.lastSync = new Date();
+      restoreDrafts();
+      S.rows.forEach(function (r) { renderConflict(r); paintRow(r); });
+      S.filter = "all";
+      applyFilter();
+      paintToolbar();
+      if (!S.rows.length) err.textContent = "No members found for " + label(group) + ". Tell your teacher.";
+      if (!quiet) $("sheet").scrollIntoView({ behavior: "smooth", block: "start" });
+      requestAnimationFrame(function () {
+        S.rows.forEach(function (r) { autosize(r.inputs.occupation); autosize(r.inputs.comment); });
+      });
+    }, function (e) {
+      err.textContent = explain(e);
+    }).then(function () {
+      S.opening = false;
+      openBtn.disabled = !ENDPOINT;
+      openBtn.textContent = "Open our sheet";
+    });
+  }
+
+  function restoreDrafts() {
+    var d = readDrafts(), n = 0;
+    Object.keys(d).forEach(function (id) {
+      var row = S.byId[id], dr = d[id];
+      if (!row || !dr || !dr.local) return;
+      if (same(dr.local, row.server)) { dropDraft(row); return; }
+      row.local = pick(dr.local);
+      row.dirty = true;
+      row.seq++;
+      if (!same(dr.base, row.server)) row.conflict = { theirs: pickAll(row.server), restored: true };
+      setInputs(row);
+      n++;
+    });
+    if (n) {
+      note(n === 1 ? "Restored 1 unsaved change from this browser." : "Restored " + n + " unsaved changes from this browser.");
+      scheduleSave(800);
+    }
+  }
+
+  function lockOut() {
+    clearTimeout(S.saveTimer);
+    var g = S.group;
+    S.group = "";
+    S.rows = []; S.byId = {};
+    tbody.textContent = "";
+    $("sheet").hidden = true;
+    form.hidden = false;
+    S.pendingGroup = g;
+    err.textContent = "Your party code has changed. Ask your party for the new code and open the sheet again. Changes that were not saved are kept in this browser.";
+  }
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var sg = $("sg").value, pa = $("pa").value, code = $("code").value.trim().toUpperCase(), me = clean("coder", $("me").value).slice(0, 12);
+    var teacher = sg === "TEACHER", missing = [];
+    if (!sg) missing.push("seminar group");
+    if (!pa && !teacher) missing.push("party");
+    if (!me) missing.push("your initials");
+    if (missing.length) { err.textContent = "Please fill in: " + missing.join(", ") + "."; return; }
+    saveLogin({ sg: sg, pa: teacher ? "" : pa, code: code, me: me });
+    openSheet(teacher ? "TEACHER" : sg + "_" + pa, code, me, false);
+  });
+
+  $("change").addEventListener("click", function () {
+    var go = function () {
+      clearTimeout(S.saveTimer);
+      S.group = "";
+      S.rows = []; S.byId = {};
+      tbody.textContent = "";
+      $("sheet").hidden = true;
+      form.hidden = false;
+      $("dlnote").textContent = "";
+      form.scrollIntoView({ behavior: "smooth", block: "center" });
+    };
+    settle(0).then(go, go);
+  });
+
+  Array.prototype.forEach.call(document.querySelectorAll(".seg button"), function (b) {
+    b.addEventListener("click", function () { S.filter = b.dataset.filter; applyFilter(); });
+  });
+  $("refresh").addEventListener("click", function () {
+    var waiting = S.rows.some(function (r) { return r.dirty && !r.conflict; });
+    (waiting ? settle(0) : Promise.resolve()).then(function () { return refresh(true); });
+  });
+
+  // ---------- rules dialog ----------
+  var dlg = $("dlg");
+  $("showrules").addEventListener("click", function () {
+    if (!$("dlgbody").childNodes.length) $("dlgbody").innerHTML = $("rulebody").innerHTML;
+    if (typeof dlg.showModal === "function") dlg.showModal();
+    else { $("rules").open = true; $("rules").scrollIntoView({ behavior: "smooth" }); }
+  });
+  $("dlgclose").addEventListener("click", function () { dlg.close(); });
+  dlg.addEventListener("click", function (e) { if (e.target === dlg) dlg.close(); });
+
+  // ---------- CSV ----------
+  function csvCell(v) {
+    var s = v === null || v === undefined ? "" : String(v);
+    if (/^[=+@]/.test(s)) s = "'" + s;
+    return '"' + s.replace(/"/g, '""') + '"';
+  }
+  function buildCsv() {
+    var head = ["group", "id", "name", "party", "constituency", "seat", "pdf_page", "member_type",
+                "occupation", "isco08", "working_class", "comment", "coder", "saved_at", "saved_by"];
+    var lines = [head.join(",")];
+    S.rows.forEach(function (r) {
+      var v = r.local;
+      lines.push([S.group, r.id, r.name, r.party, r.constituency, r.seat, r.pdf_page, r.member_type,
+        clean("occupation", v.occupation), clean("isco08", v.isco08), clean("working_class", v.working_class),
+        clean("comment", v.comment), clean("coder", v.coder), r.server.saved_at, r.server.saved_by].map(csvCell).join(","));
+    });
+    return "﻿" + lines.join("\r\n") + "\r\n";
+  }
+  $("download").addEventListener("click", function () {
+    var btn = this, out = $("dlnote");
+    btn.disabled = true;
+    out.style.color = "";
+    out.textContent = "Saving first…";
+    var go = function () {
+      btn.disabled = false;
+      var name = S.group + "_coding.csv";
+      var blob = new Blob([buildCsv()], { type: "text/csv;charset=utf-8" });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement("a");
+      a.href = url;
+      a.download = name;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(function () { URL.revokeObjectURL(url); }, 2000);
+      var left = S.rows.filter(function (r) { return state(r.local) !== "done"; }).length;
+      var unsaved = S.rows.filter(function (r) { return r.dirty; }).length;
+      var msg = "Saved " + name + " to your downloads folder. Upload it to the Canvas assignment “" + CANVAS_ASSIGNMENT + "”.";
+      if (left) msg += " Note: " + (left === 1 ? "1 row is" : left + " rows are") + " not done yet.";
+      if (unsaved) msg += " " + (unsaved === 1 ? "1 change has" : unsaved + " changes have") + " not reached the shared sheet yet.";
+      out.style.color = left || unsaved ? "var(--warn)" : "var(--ok)";
+      out.textContent = msg;
+    };
+    settle(0).then(go, go);
+  });
+
+  // ---------- start ----------
+  if (!ENDPOINT) {
+    openBtn.disabled = true;
+    err.textContent = "The coding sheet is not open yet.";
+  }
+  var saved = readLogin();
+  if (saved.sg) $("sg").value = saved.sg;
+  if (saved.pa) $("pa").value = saved.pa;
+  if (saved.code) $("code").value = saved.code;
+  if (saved.me) $("me").value = saved.me;
+  function syncParty() { $("pawrap").hidden = $("sg").value === "TEACHER"; }
+  $("sg").addEventListener("change", syncParty);
+  syncParty();
+  var savedGroup = saved.sg === "TEACHER" ? "TEACHER" : (saved.sg && saved.pa ? saved.sg + "_" + saved.pa : "");
+  if (ENDPOINT && savedGroup && saved.me) openSheet(savedGroup, saved.code || "", saved.me, true);
+})();
+</script>
+</body>
+</html>
