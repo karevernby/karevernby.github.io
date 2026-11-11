@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Seminar attendance</title>
+<style>
+  :root {
+    --ink: #1b1b1b;
+    --muted: #5e5e5e;
+    --bg: #ffffff;
+    --panel: #f7f7f5;
+    --line: #dfdfd9;
+    --accent: #2f6db5;
+    --accent-soft: #e8f0f9;
+    --ok: #2d6a4f;
+    --ok-soft: #e6f2ec;
+    --bad: #b3261e;
+    --bad-soft: #fcebea;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ink: #e9e9e6; --muted: #a3a3a0; --bg: #16181a; --panel: #1e2124;
+      --line: #32363a; --accent: #7aa9e0; --accent-soft: #23303f; --ok: #74c69d; --ok-soft: #1b2e25;
+      --bad: #f2b8b5; --bad-soft: #3a2120;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ink: #e9e9e6; --muted: #a3a3a0; --bg: #16181a; --panel: #1e2124;
+    --line: #32363a; --accent: #7aa9e0; --accent-soft: #23303f; --ok: #74c69d; --ok-soft: #1b2e25;
+    --bad: #f2b8b5; --bad-soft: #3a2120;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 520px; margin: 0 auto; padding: 36px 16px 40px; }
+  h1 { font-family: Georgia, "Times New Roman", serif; font-size: 1.75rem; line-height: 1.25; margin: 0 0 .15em; font-weight: 600; }
+  .sub { color: var(--muted); margin: 0 0 1.6em; font-size: .95rem; }
+  .sub strong { color: var(--ink); font-weight: 600; }
+  p { margin: 0 0 1em; }
+  [hidden] { display: none !important; }
+
+  .state { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 16px 18px; color: var(--muted); }
+  .state strong { color: var(--ink); }
+  .state.bad { background: var(--bad-soft); border-color: transparent; color: var(--ink); }
+  .state button { margin-top: 12px; }
+
+  form { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 18px 18px 16px; }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 420px) { .row { grid-template-columns: 1fr; } }
+  .fieldset + .fieldset, .row + .fieldset { margin-top: 14px; }
+  label.field { display: block; font-size: .88rem; color: var(--muted); margin-bottom: .35em; }
+  select, input {
+    width: 100%; padding: 12px 12px; font: inherit; font-size: 1rem; color: var(--ink);
+    background: var(--bg); border: 1px solid var(--line); border-radius: 8px;
+  }
+  select:focus, input:focus { outline: 2px solid var(--accent); outline-offset: 1px; border-color: var(--accent); }
+  input.code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; letter-spacing: .08em; text-transform: uppercase; }
+  button {
+    font: inherit; font-weight: 600; padding: 14px 26px; border-radius: 8px; cursor: pointer;
+    border: 1px solid var(--accent); background: var(--accent); color: #fff;
+  }
+  button:hover { filter: brightness(1.08); }
+  button:disabled { opacity: .55; cursor: default; filter: none; }
+  button.wide { width: 100%; margin-top: 6px; }
+  button.ghost { background: transparent; color: var(--accent); }
+  button.link { background: none; border: 0; padding: 0; color: var(--accent); font-weight: 500; text-decoration: underline; font-size: inherit; }
+  .err { color: var(--bad); font-size: .92rem; margin: .9em 0 .2em; min-height: 1.4em; }
+
+  .done { background: var(--ok-soft); border: 1px solid transparent; border-radius: 10px; padding: 22px 18px 18px; text-align: center; }
+  .done .tick {
+    width: 56px; height: 56px; border-radius: 50%; background: var(--ok); margin: 0 auto 12px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .done .tick svg { width: 30px; height: 30px; }
+  .done h2 { font-family: Georgia, "Times New Roman", serif; font-size: 1.35rem; margin: 0 0 .5em; font-weight: 600; }
+  .done .who { font-size: 1.1rem; font-weight: 600; margin: 0 0 .15em; overflow-wrap: anywhere; }
+  .done .what { color: var(--muted); margin: 0 0 .15em; }
+  .done .at { color: var(--muted); font-size: .92rem; margin: 0; font-variant-numeric: tabular-nums; }
+  .again { text-align: center; font-size: .9rem; color: var(--muted); margin: 1.2em 0 0; }
+  .foot { color: var(--muted); font-size: .84rem; margin: 2em 0 0; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Seminar attendance</h1>
+  <p class="sub">Voters, Representatives, and Political Decision Making<span id="sessionwrap" hidden> &middot; <strong id="session"></strong></span></p>
+
+  <div class="state" id="state" role="status" aria-live="polite">Checking whether registration is open&hellip;</div>
+
+  <form id="form" hidden novalidate>
+    <div class="row">
+      <div>
+        <label class="field" for="sg">Seminar group</label>
+        <select id="sg">
+          <option value="">Choose&hellip;</option>
+          <option value="SG1">Seminar group 1</option>
+          <option value="SG2">Seminar group 2</option>
+        </select>
+      </div>
+      <div>
+        <label class="field" for="pa">Party</label>
+        <select id="pa">
+          <option value="">Choose&hellip;</option>
+          <option value="1">Party 1</option>
+          <option value="2">Party 2</option>
+          <option value="3">Party 3</option>
+          <option value="4">Party 4</option>
+          <option value="5">Party 5</option>
+        </select>
+      </div>
+    </div>
+    <div class="fieldset">
+      <label class="field" for="name">Your first and last name</label>
+      <input id="name" type="text" autocomplete="name" autocapitalize="words" spellcheck="false" maxlength="80">
+    </div>
+    <div class="fieldset" id="codewrap" hidden>
+      <label class="field" for="code">Code shown in the room</label>
+      <input id="code" class="code" type="text" autocomplete="off" autocapitalize="characters" autocorrect="off" spellcheck="false" maxlength="20">
+    </div>
+    <p class="err" id="err" role="alert"></p>
+    <button type="submit" class="wide" id="go">Register my attendance</button>
+  </form>
+
+  <div id="donewrap" hidden>
+    <div class="done" role="status" aria-live="polite">
+      <div class="tick" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+      <h2 id="donetitle">You are registered</h2>
+      <p class="who" id="donewho"></p>
+      <p class="what" id="donewhat"></p>
+      <p class="at" id="doneat"></p>
+    </div>
+    <p class="again">Not you? <button type="button" class="link" id="again">Register another name</button></p>
+  </div>
+
+  <p class="foot">Your name, seminar group and party are saved, with the time, in a Google Sheet that belongs to the course teacher, and nothing else is collected. This browser remembers what you chose, so you need not type it again at the next seminar.</p>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  // Web app URL of the Apps Script attached to the attendance Google Sheet (ends in /exec).
+  var ENDPOINT = "https://script.google.com/macros/s/AKfycbwy7kAFNxgepRecyJKkV-V8ew6QgGin1iFshx2mQKrGiUSVUNvMDBhLTDCDkDftlj8nnQ/exec";
+
+  var ME_KEY = "attendance-me";       // seminar group, party and name, for next time
+  var DONE_KEY = "attendance-done";   // the registration made today, so a reload shows it again
+
+  try {
+    var q = new URLSearchParams(location.search);
+    if (/^(localhost|127\.0\.0\.1)$/.test(location.hostname) && q.get("endpoint")) ENDPOINT = q.get("endpoint");
+  } catch (e) {}
+
+  function $(id) { return document.getElementById(id); }
+  function read(key) { try { return JSON.parse(localStorage.getItem(key) || "null") || null; } catch (e) { return null; } }
+  function write(key, v) { try { localStorage.setItem(key, JSON.stringify(v)); } catch (e) {} }
+  function drop(key) { try { localStorage.removeItem(key); } catch (e) {} }
+  function today() {
+    var d = new Date(), p = function (n) { return (n < 10 ? "0" : "") + n; };
+    return d.getFullYear() + "-" + p(d.getMonth() + 1) + "-" + p(d.getDate());
+  }
+  function groupLabel(sg, pa) { return "Seminar group " + String(sg).replace("SG", "") + ", Party " + pa; }
+  function cleanName(v) { return String(v || "").replace(/[\u0000-\u001f\u007f]/g, " ").replace(/\s+/g, " ").trim().slice(0, 80); }
+
+  // ---------- server ----------
+  function call(url, opts, ms) {
+    var ctl = typeof AbortController === "function" ? new AbortController() : null;
+    var timer = ctl ? setTimeout(function () { ctl.abort(); }, ms) : null;
+    if (ctl) opts.signal = ctl.signal;
+    return fetch(url, opts).then(function (res) {
+      if (!res.ok) throw new Error("http_" + res.status);
+      return res.json();
+    }).then(function (data) {
+      if (timer) clearTimeout(timer);
+      if (!data || data.ok !== true) throw new Error((data && data.error) || "bad_response");
+      return data;
+    }, function (err) {
+      if (timer) clearTimeout(timer);
+      throw err;
+    });
+  }
+  function explain(err) {
+    var m = String((err && err.message) || err);
+    if (m === "closed") return "Registration has just closed. Tell your teacher if you are in the room.";
+    if (m === "wrong_code") return "That is not the code shown in the room. Check it and try again.";
+    if (m === "bad_name") return "Type your first and last name.";
+    if (m === "bad_group") return "Choose your seminar group and party.";
+    if (m === "full") return "The list for this seminar group is full. Tell your teacher.";
+    if (m === "busy") return "Many are registering right now. Try again in a moment.";
+    if (m === "AbortError" || /abort|network|fetch|load failed|http_/i.test(m)) return "Could not reach the attendance list. Check your connection and try again.";
+    return "Something went wrong (" + m + "). Try again, and tell your teacher if it keeps happening.";
+  }
+
+  // ---------- what the page shows ----------
+  function show(which) {
+    $("state").hidden = which !== "state";
+    $("form").hidden = which !== "form";
+    $("donewrap").hidden = which !== "done";
+  }
+  function setState(html, bad, retry) {
+    var el = $("state");
+    el.className = "state" + (bad ? " bad" : "");
+    el.innerHTML = html;
+    if (retry) {
+      var b = document.createElement("button");
+      b.type = "button"; b.className = "ghost"; b.textContent = "Try again";
+      b.addEventListener("click", check);
+      el.appendChild(document.createElement("br"));
+      el.appendChild(b);
+    }
+    show("state");
+  }
+  function setSession(name) {
+    $("session").textContent = name || "";
+    $("sessionwrap").hidden = !name;
+  }
+  function showDone(d, already) {
+    $("donetitle").textContent = already ? "You were already registered" : "You are registered";
+    $("donewho").textContent = d.name;
+    $("donewhat").textContent = (d.session ? d.session + " · " : "") + groupLabel(d.sg, d.pa);
+    $("doneat").textContent = "Registered " + d.date + " at " + d.at;
+    show("done");
+  }
+
+  var needsCode = false;
+
+  function check() {
+    if (!ENDPOINT) {
+      setState("<strong>The attendance list is not set up yet.</strong> Tell your teacher.", true, false);
+      return;
+    }
+    setState("Checking whether registration is open&hellip;", false, false);
+    call(ENDPOINT + "?action=status", { method: "GET", cache: "no-store" }, 20000).then(function (s) {
+      setSession(s.session);
+      var done = read(DONE_KEY);
+      if (done && done.date === today() && (done.session || "") === (s.session || "")) { showDone(done, false); return; }
+      if (!s.open) {
+        setState("<strong>Registration is closed.</strong> It opens during the seminar. Scan the code again when your teacher asks you to.", false, true);
+        return;
+      }
+      needsCode = !!s.needs_code;
+      $("codewrap").hidden = !needsCode;
+      $("err").textContent = "";
+      show("form");
+    }, function (err) {
+      setState(explain(err), true, true);
+    });
+  }
+
+  $("form").addEventListener("submit", function (ev) {
+    ev.preventDefault();
+    var sg = $("sg").value, pa = $("pa").value, name = cleanName($("name").value), code = $("code").value.trim(), err = $("err");
+    if (!sg || !pa) { err.textContent = explain("bad_group"); (sg ? $("pa") : $("sg")).focus(); return; }
+    if (name.replace(/[\s\d!-\/:-@\[-`{-~]/g, "").length < 2) { err.textContent = explain("bad_name"); $("name").focus(); return; }
+    if (needsCode && !code) { err.textContent = "Type the code shown in the room."; $("code").focus(); return; }
+    err.textContent = "";
+    var go = $("go");
+    go.disabled = true; go.textContent = "Registering…";
+    call(ENDPOINT, { method: "POST", body: JSON.stringify({ action: "register", sg: sg, party: pa, name: name, code: code }) }, 30000).then(function (r) {
+      var d = { date: today(), session: r.session || "", sg: sg, pa: pa, name: name, at: r.at || "" };
+      write(ME_KEY, { sg: sg, pa: pa, name: name });
+      write(DONE_KEY, d);
+      setSession(d.session);
+      showDone(d, !!r.already);
+    }, function (e) {
+      var m = String((e && e.message) || e);
+      err.textContent = explain(e);
+      if (m === "wrong_code") { $("codewrap").hidden = false; needsCode = true; $("code").focus(); }
+    }).then(function () {
+      go.disabled = false; go.textContent = "Register my attendance";
+    });
+  });
+
+  $("again").addEventListener("click", function () {
+    drop(DONE_KEY);
+    $("name").value = ""; $("code").value = "";
+    check();
+  });
+
+  var me = read(ME_KEY);
+  if (me) {
+    if (me.sg) $("sg").value = me.sg;
+    if (me.pa) $("pa").value = me.pa;
+    if (me.name) $("name").value = me.name;
+  }
+  check();
+})();
+</script>
+</body>
+</html>
