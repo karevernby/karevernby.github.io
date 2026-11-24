@@ -159,6 +159,31 @@
   .legend i.p { background: var(--warn-line); } .legend i.d { background: var(--ok); } .legend i.c { background: var(--bad); }
   .after { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin: 1.4em 0 0; }
   .dlnote { font-size: .9rem; margin: .8em 0 0; min-height: 1.4em; }
+  .vpanel { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 16px 20px 10px; margin: 1em 0 0; max-width: 760px; }
+  .vpanel p { font-size: .93rem; }
+  .vpool { color: var(--muted); }
+  .vform { display: grid; grid-template-columns: 170px 1fr; gap: 16px; }
+  @media (max-width: 560px) { .vform { grid-template-columns: 1fr; } }
+  .vform input { width: 100%; padding: 10px 12px; font: inherit; font-size: .95rem; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 8px; }
+  .vform input:focus { outline: 2px solid var(--accent); outline-offset: 1px; border-color: var(--accent); }
+  .vpanel .actions { margin-top: 1em; }
+  .vmeta { color: var(--muted); font-size: .88rem; margin: .5em 0 0; }
+  .vresult { margin: 2em 0 0; border-top: 1px solid var(--line); padding-top: .4em; max-width: 1100px; }
+  .vresult h2 { margin-top: 1.2em; }
+  .vresult h3 { font-family: Georgia, "Times New Roman", serif; font-size: 1rem; margin: 1.6em 0 .6em; font-weight: 600; }
+  .vresult p { font-size: .93rem; }
+  #vsum p { margin: 0 0 .45em; }
+  #vsum .big { font-size: 1.05rem; }
+  #vsum .warnline { color: var(--warn); }
+  .vtable { overflow-x: auto; }
+  table.vx, table.vd { border-collapse: collapse; font-size: .88rem; }
+  table.vx th, table.vx td, table.vd th, table.vd td { border: 1px solid var(--line); padding: 6px 10px; text-align: left; vertical-align: top; }
+  table.vx thead th, table.vd thead th, table.vx tbody th { background: var(--panel); font-weight: 600; }
+  table.vx td { text-align: right; font-variant-numeric: tabular-nums; min-width: 72px; }
+  table.vx td.same { background: var(--ok-soft); font-weight: 600; }
+  table.vd { width: 100%; min-width: 860px; }
+  table.vd td.wc { text-align: center; font-weight: 600; font-variant-numeric: tabular-nums; }
+  table.vd small { display: block; color: var(--muted); }
   .foot { max-width: 720px; margin: 3.5em auto 0; padding: 1.4em 16px 80px; border-top: 1px solid var(--line); color: var(--muted); font-size: .85rem; }
 
   dialog { width: min(760px, calc(100% - 32px)); max-height: calc(100vh - 48px); border: 1px solid var(--line); border-radius: 12px; padding: 0; background: var(--bg); color: var(--ink); }
@@ -197,6 +222,7 @@
           <option value="SG1">Seminar group 1</option>
           <option value="SG2">Seminar group 2</option>
           <option value="TEACHER">Course teacher</option>
+          <option value="VALIDATION">Course teacher: validation sample</option>
         </select>
       </div>
       <div id="pawrap">
@@ -235,7 +261,7 @@
       <h3>Occupation</h3>
       <p>We follow the rule of the Global Legislators Database (GLD), so that our figures can be compared with theirs: the occupation is the member&rsquo;s last full-time paid job that was neither an elected office nor a political job, held before the member&rsquo;s first paid elected office. The aim is to capture the member&rsquo;s social position before a political career could change it. Copy the job from the <em>Anställningar</em> section word for word, including employer and years, for example &ldquo;Chaufför, Swedlog, Helsingborg 13&ndash;14&rdquo;.</p>
       <ol>
-        <li>Find the anchor: the year of the member&rsquo;s first paid elected office. In Sweden these are kommunalråd, oppositionsråd, regionråd or landstingsråd, borgarråd, riksdagsledamot and member of the European Parliament, plus paid full-time elected posts in a party or trade union (for example partiordförande or förbundsordförande). Ordinary seats in kommunfullmäktige, regionfullmäktige, nämnder and boards are not paid offices (they carry a fee, not a salary) and do not count as the anchor.</li>
+        <li>Find the anchor: the year of the member&rsquo;s first paid elected office. In Sweden these are kommunalråd, oppositionsråd, regionråd or landstingsråd, borgarråd, riksdagsledamot and member of the European Parliament, plus paid full-time elected posts in a party or trade union (for example partiordförande or förbundsordförande). Ordinary seats in kommunfullmäktige, regionfullmäktige, nämnder and boards are not paid offices (they carry a fee, not a salary) and do not count as the anchor. The same goes for chairs and vice chairs of kommunfullmäktige, nämnder and boards, even when the post carries a fixed part-time arvode, because such a fee does not replace a job. The one exception is the chair of the kommunstyrelse or regionstyrelse, which is normally a paid kommunalråd or regionråd post and counts as the anchor even when the book does not use that title.</li>
         <li>Use the <em>Anställningar</em> section to find the last job that began before the anchor year. Municipal, regional, state and association offices are not jobs and must not be used as the occupation.</li>
         <li>Skip political jobs, even though they are paid. These are appointments by a politician or a party group (politisk sekreterare, politiskt sakkunnig, statssekreterare, press secretary for a minister or party leader, political assistant to an MP or MEP) and all jobs in a party or party organisation, youth wings included (partisekreterare, partiombudsman, kommunikatör at a party office). If such a job is the last one before the anchor, go back to the job before it.</li>
         <li>Employment by a trade union is a job and is coded like any other (for example ombudsman or negotiator at a union); it matters for the working-class rule below. So are jobs in organisations outside the party, such as a study association, even when they are close to it.</li>
@@ -296,6 +322,24 @@
     <span class="who" id="who"></span>
     <button type="button" class="link" id="change">Change</button>
   </div>
+  <div class="vpanel" id="vdraw" hidden>
+    <p><strong>No validation sample yet.</strong> Draw members at random from the rows the students have saved, spread evenly over the parties, and code them again here. You will not see the students&rsquo; codes until you ask for the comparison.</p>
+    <p class="vpool" id="vpool"></p>
+    <div class="vform">
+      <div>
+        <label class="field" for="vn">Members to draw</label>
+        <input type="number" id="vn" min="1" max="100" step="1" value="30">
+      </div>
+      <div class="vids">
+        <label class="field" for="vids">Or these member ids (optional)</label>
+        <input type="text" id="vids" autocomplete="off" spellcheck="false" placeholder="e.g. 26, 196, 245">
+      </div>
+    </div>
+    <div class="actions"><button type="button" id="vgo">Draw the sample</button><button type="button" class="ghost" id="vrecheck">Check again</button></div>
+    <p class="err" id="verr" role="alert"></p>
+  </div>
+  <p class="vmeta" id="vmeta" hidden></p>
+  <div id="gridpart">
   <div class="toolbar">
     <div class="prog"><span id="prog">0 of 0 done</span><span class="bar" aria-hidden="true"><i id="bar"></i></span></div>
     <div class="seg" role="group" aria-label="Show rows">
@@ -305,6 +349,7 @@
     </div>
     <button type="button" class="ghost small" id="showrules">Coding rules</button>
     <button type="button" class="ghost small" id="refresh">Refresh</button>
+    <button type="button" class="ghost small" id="vcompare" hidden>Compare with the students</button>
     <span class="status" id="status" aria-live="polite"></span>
   </div>
   <p class="note" id="note" aria-live="polite"></p>
@@ -334,6 +379,33 @@
     <button type="button" id="download">Download CSV</button>
   </div>
   <p class="dlnote" id="dlnote" aria-live="polite"></p>
+  </div>
+  <section class="vresult" id="vresult" hidden aria-labelledby="vrtitle">
+    <h2 id="vrtitle">Your codes and the students&rsquo; codes</h2>
+    <div id="vask">
+      <p>This shows what the students coded for these members. Finish your own coding first, so that it stays blind.</p>
+      <div class="actions">
+        <button type="button" id="vshow">Show the comparison</button>
+        <button type="button" class="ghost" id="vcancel">Not yet</button>
+      </div>
+    </div>
+    <div id="vout" hidden>
+      <div id="vsum"></div>
+      <div class="vtable"><table class="vx" id="vcross"></table></div>
+      <h3 id="vdtitle"></h3>
+      <div class="vtable"><table class="vd" id="vdis"></table></div>
+      <div id="vsem" hidden>
+        <h3>A second party at the seminar</h3>
+        <div id="vsemsum"></div>
+        <div class="vtable"><table class="vd" id="vsemtab"></table></div>
+      </div>
+      <div class="after">
+        <button type="button" class="ghost" id="vcsv">Download the comparison (CSV)</button>
+        <button type="button" class="ghost" id="vagain">Compare again</button>
+      </div>
+    </div>
+    <p class="err" id="vrerr" role="alert"></p>
+  </section>
 </section>
 
 <p class="foot">The codings and the initials you type are saved in a Google Sheet that belongs to the course teacher, and nothing else is collected. Until a change is saved, this browser also keeps a copy of it, so you do not lose it if the connection drops.</p>
@@ -442,6 +514,9 @@
     });
   }
   function load(group, code) {
+    if (group === "VALIDATION") {
+      return call(ENDPOINT + "?action=vload&code=" + encodeURIComponent(code), { method: "GET", cache: "no-store" }, 25000);
+    }
     return call(ENDPOINT + "?action=load&group=" + encodeURIComponent(group) + "&code=" + encodeURIComponent(code),
                 { method: "GET", cache: "no-store" }, 25000);
   }
@@ -452,14 +527,21 @@
   }
   function explain(err) {
     var m = String((err && err.message) || err);
-    if (m === "wrong_code") return "That code does not match " + label(S.pendingGroup || S.group) + ". Check the code your party received in Canvas.";
+    if (m === "wrong_code") return "That code does not match " + label((S.pendingGroup || S.group) === "VALIDATION" ? "TEACHER" : (S.pendingGroup || S.group)) + ". Check the code your party received in Canvas.";
     if (m === "bad_group") return "Choose your seminar group and party.";
     if (m === "busy") return "The sheet is busy. Try again in a moment.";
+    if (m === "already_drawn") return "A validation sample is already drawn. Press Refresh to open it.";
+    if (m === "bad_n") return "Choose between 1 and 100 members.";
+    if (m === "no_validation_sample") return "There is no validation sample yet. Draw one first.";
+    if (/^too_few_rows:/.test(m)) return "The students have saved only " + m.split(":")[1] + " rows so far, too few for this draw. Choose fewer members or wait.";
+    if (/^unknown_ids:/.test(m)) return "These ids are not among the rows the students have saved: " + m.split(":")[1].split(",").join(", ") + ".";
+    if (m === "unknown_action") return "The coding sheet does not know this yet. Update the Apps Script (Deploy > Manage deployments > New version).";
     if (m === "AbortError" || /abort|network|fetch|load failed|http_/i.test(m)) return "Could not reach the coding sheet. Check your connection and try again in a minute.";
     return "Something went wrong (" + m + "). Try again in a minute, and tell your teacher if it keeps happening.";
   }
   function label(g) {
     if (g === "TEACHER") return "Course teacher";
+    if (g === "VALIDATION") return "Validation sample";
     var m = /^SG([12])_P([1-5])$/.exec(g || "");
     return m ? "Seminar group " + m[1] + ", Party " + m[2] : "your party";
   }
@@ -741,7 +823,7 @@
     var sent = batch.map(function (r) { return { row: r, values: pick(r.local), base: pick(r.server) }; });
     sent.forEach(function (s) { s.row.sending = true; paintRow(s.row); });
     var body = {
-      action: "save", group: S.group, code: S.code, me: S.me,
+      action: S.group === "VALIDATION" ? "vsave" : "save", group: S.group, code: S.code, me: S.me,
       rows: sent.map(function (s) { return { id: s.row.id, base: s.base, values: s.values }; })
     };
     var p = post(body, keepalive).then(function (res) {
@@ -867,31 +949,7 @@
     openBtn.disabled = true;
     openBtn.textContent = "Opening…";
     load(group, code).then(function (res) {
-      S.group = group; S.code = code; S.me = me;
-      S.rows = []; S.byId = {}; S.failures = 0; S.epoch++;
-      tbody.textContent = "";
-      (res.rows || []).forEach(function (r, i) {
-        var row = buildRow(r, i);
-        S.rows.push(row);
-        S.byId[row.id] = row;
-        tbody.appendChild(row.tr);
-      });
-      $("sheettitle").textContent = label(group);
-      $("who").textContent = "coding as " + me;
-      $("sheet").hidden = false;
-      form.hidden = true;
-      S.lastRefresh = Date.now();
-      S.lastSync = new Date();
-      restoreDrafts();
-      S.rows.forEach(function (r) { renderConflict(r); paintRow(r); });
-      S.filter = "all";
-      applyFilter();
-      paintToolbar();
-      if (!S.rows.length) err.textContent = "No members found for " + label(group) + ". Tell your teacher.";
-      if (!quiet) $("sheet").scrollIntoView({ behavior: "smooth", block: "start" });
-      requestAnimationFrame(function () {
-        S.rows.forEach(function (r) { autosize(r.inputs.occupation); autosize(r.inputs.comment); });
-      });
+      showSheet(group, code, me, res, quiet);
     }, function (e) {
       err.textContent = explain(e);
     }).then(function () {
@@ -900,6 +958,295 @@
       openBtn.textContent = "Open our sheet";
     });
   }
+
+  function showSheet(group, code, me, res, quiet) {
+    var isV = group === "VALIDATION";
+    S.group = group; S.code = code; S.me = me;
+    S.rows = []; S.byId = {}; S.failures = 0; S.epoch++;
+    tbody.textContent = "";
+    (res.rows || []).forEach(function (r, i) {
+      var row = buildRow(r, i);
+      S.rows.push(row);
+      S.byId[row.id] = row;
+      tbody.appendChild(row.tr);
+    });
+    $("sheettitle").textContent = label(group);
+    $("who").textContent = "coding as " + me;
+    $("sheet").hidden = false;
+    form.hidden = true;
+    S.lastRefresh = Date.now();
+    S.lastSync = new Date();
+    restoreDrafts();
+    S.rows.forEach(function (r) { renderConflict(r); paintRow(r); });
+    S.filter = "all";
+    applyFilter();
+    paintToolbar();
+    var undrawn = isV && !res.drawn;
+    $("vdraw").hidden = !undrawn;
+    $("gridpart").hidden = undrawn;
+    $("vcompare").hidden = !isV || undrawn;
+    $("vmeta").hidden = !isV || undrawn;
+    $("vresult").hidden = true;
+    $("vout").hidden = true;
+    V.pairs = null;
+    $("verr").textContent = "";
+    if (undrawn) {
+      var pool = res.pool || { rows: 0, groups: 0 };
+      $("vpool").textContent = "The students have saved " + pool.rows + (pool.rows === 1 ? " row" : " rows") + " in " +
+        pool.groups + (pool.groups === 1 ? " party" : " parties") + " so far. Your own 50 members are not in the draw.";
+      if (res.defaultN) $("vn").value = String(Math.min(res.defaultN, pool.rows || res.defaultN));
+    } else if (isV) {
+      var m = res.meta || {};
+      $("vmeta").textContent = S.rows.length + " members, " + (m.how || "drawn") +
+        (m.drawn_at ? " on " + new Date(m.drawn_at).toLocaleString("en-GB", { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" }) : "") +
+        (m.seed ? " (seed " + m.seed + ")" : "") + ". The students’ codes stay hidden until you press Compare with the students.";
+    } else if (!S.rows.length) {
+      err.textContent = "No members found for " + label(group) + ". Tell your teacher.";
+    }
+    if (!quiet) $("sheet").scrollIntoView({ behavior: "smooth", block: "start" });
+    requestAnimationFrame(function () {
+      S.rows.forEach(function (r) { autosize(r.inputs.occupation); autosize(r.inputs.comment); });
+    });
+  }
+
+  // ---------- validation sample (teacher only) ----------
+  $("vgo").addEventListener("click", function () {
+    var btn = this, verr = $("verr");
+    var ids = ($("vids").value.match(/\d+/g) || []);
+    var n = parseInt($("vn").value, 10);
+    verr.textContent = "";
+    if (!ids.length && !(n >= 1 && n <= 100)) { verr.textContent = explain(new Error("bad_n")); return; }
+    btn.disabled = true;
+    btn.textContent = "Drawing…";
+    post({ action: "vdraw", code: S.code, n: n, ids: ids }).then(function (res) {
+      showSheet("VALIDATION", S.code, S.me, res, true);
+      note("Drew " + (res.rows || []).length + " members. Code them as you would any row.");
+    }, function (e) {
+      verr.textContent = explain(e);
+    }).then(function () {
+      btn.disabled = false;
+      btn.textContent = "Draw the sample";
+    });
+  });
+
+  $("vrecheck").addEventListener("click", function () {
+    var btn = this;
+    btn.disabled = true;
+    load(S.group, S.code).then(function (res) { showSheet(S.group, S.code, S.me, res, true); },
+                               function (e) { $("verr").textContent = explain(e); })
+      .then(function () { btn.disabled = false; });
+  });
+
+  var V = { pairs: null };
+  $("vcompare").addEventListener("click", function () {
+    $("vresult").hidden = false;
+    $("vask").hidden = !!V.pairs;
+    $("vrerr").textContent = "";
+    $("vresult").scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+  $("vcancel").addEventListener("click", function () { $("vresult").hidden = true; });
+  function runCompare() {
+    var btn = $("vshow");
+    btn.disabled = true;
+    $("vrerr").textContent = "";
+    settle(0).then(function () {
+      return call(ENDPOINT + "?action=vcompare&code=" + encodeURIComponent(S.code), { method: "GET", cache: "no-store" }, 25000);
+    }).then(function (res) {
+      V.pairs = res.pairs || [];
+      renderCompare(V.pairs);
+      $("vask").hidden = true;
+      $("vout").hidden = false;
+    }, function (e) {
+      $("vrerr").textContent = explain(e);
+    }).then(function () { btn.disabled = false; });
+  }
+  $("vshow").addEventListener("click", runCompare);
+  $("vagain").addEventListener("click", runCompare);
+
+  function wcOf(v) { return clean("working_class", v && v.working_class); }
+  function kappa(pairs) {
+    var n = pairs.length;
+    if (!n) return null;
+    var po = pairs.filter(function (p) { return p[0] === p[1]; }).length / n, pe = 0, cats = {};
+    pairs.forEach(function (p) { cats[p[0]] = true; cats[p[1]] = true; });
+    Object.keys(cats).forEach(function (k) {
+      pe += (pairs.filter(function (p) { return p[0] === k; }).length / n) * (pairs.filter(function (p) { return p[1] === k; }).length / n);
+    });
+    if (pe >= 1) return po === 1 ? 1 : null;
+    return (po - pe) / (1 - pe);
+  }
+  function pct(a, b) { return b ? Math.round(100 * a / b) + "%" : "–"; }
+  function k2(x) { return x === null ? "–" : x.toFixed(2); }
+  function wcName(w) { return w === "" ? "empty" : w; }
+
+  // Members a second party coded at the seminar (seminar3-tasks.html).
+  function renderSeminar(pairs) {
+    var given = pairs.filter(function (p) { return p.seminar; });
+    var sem = given.filter(function (p) { return p.students && state(p.seminar) !== "todo"; });
+    var box = $("vsemsum"), t = $("vsemtab");
+    $("vsem").hidden = !given.length;
+    box.textContent = "";
+    t.textContent = "";
+    var add = function (cls, text) { box.appendChild(el("p", cls, text)); };
+    if (!given.length) return;
+    if (!sem.length) {
+      add("", given.length + " members are handed out for the seminar. No party has coded its member yet.");
+      return;
+    }
+    var ps = sem.map(function (p) { return [wcOf(p.students), wcOf(p.seminar)]; });
+    var a = ps.filter(function (x) { return x[0] === x[1]; }).length;
+    add("big", "The party at the seminar and the party that coded the member before agree on working class in " + a + " of " + ps.length +
+      " members (" + pct(a, ps.length) + "), kappa " + k2(kappa(ps)) + ".");
+    var withT = sem.filter(function (p) { return state(p.teacher) !== "todo"; });
+    if (withT.length) {
+      var pt = withT.map(function (p) { return [wcOf(p.teacher), wcOf(p.seminar)]; });
+      var at = pt.filter(function (x) { return x[0] === x[1]; }).length;
+      add("", "The party at the seminar and you agree in " + at + " of " + pt.length + " (" + pct(at, pt.length) + ").");
+    }
+    if (given.length > sem.length) add("warnline", (given.length - sem.length) + " of the " + given.length + " members handed out are not coded yet.");
+    var h = el("thead"), r0 = el("tr");
+    ["Member", "Coded before by", "WC", "At the seminar by", "WC", "You", "WC"].forEach(function (x) { r0.appendChild(el("th", "", x)); });
+    h.appendChild(r0);
+    t.appendChild(h);
+    var b = el("tbody");
+    var cellOf = function (v) {
+      var td = el("td");
+      td.appendChild(document.createTextNode(clean("occupation", v && v.occupation) || "–"));
+      var meta = [clean("isco08", v && v.isco08) ? "ISCO " + clean("isco08", v.isco08) : "", clean("comment", v && v.comment)].filter(Boolean).join(" · ");
+      if (meta) td.appendChild(el("small", "", meta));
+      return td;
+    };
+    sem.forEach(function (p) {
+      var tr = el("tr"), m = el("td");
+      m.appendChild(document.createTextNode(p.name));
+      m.appendChild(el("small", "", p.party || ""));
+      tr.appendChild(m);
+      var c1 = cellOf(p.students);
+      c1.insertBefore(el("small", "", label(p.group)), c1.firstChild);
+      tr.appendChild(c1);
+      tr.appendChild(el("td", "wc", wcName(wcOf(p.students))));
+      var c2 = cellOf(p.seminar);
+      c2.insertBefore(el("small", "", label(p.seminar.party)), c2.firstChild);
+      tr.appendChild(c2);
+      tr.appendChild(el("td", "wc", wcName(wcOf(p.seminar))));
+      var mine = state(p.teacher) !== "todo";
+      tr.appendChild(mine ? cellOf(p.teacher) : el("td", "", "not coded yet"));
+      tr.appendChild(el("td", "wc", mine ? wcName(wcOf(p.teacher)) : "–"));
+      b.appendChild(tr);
+    });
+    t.appendChild(b);
+  }
+
+  function renderCompare(pairs) {
+    renderSeminar(pairs);
+    var both = pairs.filter(function (p) { return p.students && state(p.teacher) !== "todo"; });
+    var untouched = pairs.filter(function (p) { return p.students && state(p.teacher) === "todo"; }).length;
+    var wc = both.map(function (p) { return [wcOf(p.teacher), wcOf(p.students)]; });
+    var agree = wc.filter(function (x) { return x[0] === x[1]; }).length;
+    var coded = wc.filter(function (x) { return x[0] !== "" && x[1] !== ""; });
+    var codedAgree = coded.filter(function (x) { return x[0] === x[1]; }).length;
+    var isco = both.filter(function (p) { return clean("isco08", p.teacher.isco08) && clean("isco08", p.students.isco08); });
+    var iscoAgree = isco.filter(function (p) { return clean("isco08", p.teacher.isco08).charAt(0) === clean("isco08", p.students.isco08).charAt(0); }).length;
+    var undone = both.filter(function (p) { return state(p.teacher) === "partial"; }).length;
+    var share = function (i) {
+      var c = wc.filter(function (x) { return x[i] !== ""; });
+      return c.filter(function (x) { return x[i] === "1"; }).length + " of " + c.length;
+    };
+    var sum = $("vsum");
+    sum.textContent = "";
+    var add = function (cls, text) { sum.appendChild(el("p", cls, text)); };
+    if (!both.length) {
+      add("big", "You have not coded any of these members yet, so there is nothing to compare.");
+      $("vcross").textContent = "";
+      $("vdis").textContent = "";
+      $("vdtitle").textContent = "";
+      return;
+    }
+    add("big", "Working class agrees in " + agree + " of " + wc.length + " rows (" + pct(agree, wc.length) + "), kappa " + k2(kappa(wc)) + ", with 1, 0 and empty as three categories.");
+    add("", "Where both you and the students gave a code: " + codedAgree + " of " + coded.length + " (" + pct(codedAgree, coded.length) + "), kappa " + k2(kappa(coded)) + ".");
+    add("", "First ISCO digit agrees in " + iscoAgree + " of " + isco.length + " rows where both gave an ISCO code.");
+    add("", "Coded as working class: you " + share(0) + ", the students " + share(1) + ".");
+    if (untouched) add("warnline", untouched + (untouched === 1 ? " member you have not coded yet is" : " members you have not coded yet are") + " left out.");
+    if (undone) add("warnline", undone + (undone === 1 ? " of your rows is" : " of your rows are") + " only partly coded and count as you left them.");
+    if (pairs.length !== both.length) add("warnline", (pairs.length - both.length) + " members are no longer in the coding tab and are left out.");
+
+    var cats = ["1", "0", ""], cross = $("vcross");
+    cross.textContent = "";
+    var thead = el("thead"), hr = el("tr");
+    hr.appendChild(el("th", "", "You ↓ / Students →"));
+    cats.forEach(function (c) { hr.appendChild(el("th", "", wcName(c))); });
+    thead.appendChild(hr);
+    cross.appendChild(thead);
+    var tb = el("tbody");
+    cats.forEach(function (a) {
+      var tr = el("tr");
+      tr.appendChild(el("th", "", wcName(a)));
+      cats.forEach(function (b) {
+        tr.appendChild(el("td", a === b ? "same" : "", String(wc.filter(function (x) { return x[0] === a && x[1] === b; }).length)));
+      });
+      tb.appendChild(tr);
+    });
+    cross.appendChild(tb);
+
+    var dis = both.filter(function (p) { return wcOf(p.teacher) !== wcOf(p.students); });
+    $("vdtitle").textContent = dis.length ? "The " + (dis.length === 1 ? "disagreement" : dis.length + " disagreements") + " on working class" : "No disagreements on working class";
+    var t = $("vdis");
+    t.textContent = "";
+    if (dis.length) {
+      var h = el("thead"), r0 = el("tr");
+      ["Member", "You", "WC", "Students", "WC", "Students’ comment"].forEach(function (x) { r0.appendChild(el("th", "", x)); });
+      h.appendChild(r0);
+      t.appendChild(h);
+      var b = el("tbody");
+      dis.forEach(function (p) {
+        var tr = el("tr");
+        var m = el("td");
+        m.appendChild(document.createTextNode(p.name));
+        m.appendChild(el("small", "", (p.party || "") + " · " + label(p.group)));
+        tr.appendChild(m);
+        var cellOf = function (v) {
+          var td = el("td");
+          td.appendChild(document.createTextNode(clean("occupation", v.occupation) || "–"));
+          var meta = [clean("isco08", v.isco08) ? "ISCO " + clean("isco08", v.isco08) : "", clean("comment", v.comment)].filter(Boolean).join(" · ");
+          if (meta) td.appendChild(el("small", "", meta));
+          return td;
+        };
+        tr.appendChild(cellOf(p.teacher));
+        tr.appendChild(el("td", "wc", wcName(wcOf(p.teacher))));
+        var st = cellOf({ occupation: p.students.occupation, isco08: p.students.isco08 });
+        tr.appendChild(st);
+        tr.appendChild(el("td", "wc", wcName(wcOf(p.students))));
+        tr.appendChild(el("td", "", clean("comment", p.students.comment) || "–"));
+        b.appendChild(tr);
+      });
+      t.appendChild(b);
+    }
+  }
+
+  $("vcsv").addEventListener("click", function () {
+    if (!V.pairs) return;
+    var head = ["id", "name", "party", "group", "your_occupation", "your_isco08", "your_working_class", "your_comment",
+                "students_occupation", "students_isco08", "students_working_class", "students_comment", "students_coder", "wc_agree",
+                "seminar_party", "seminar_occupation", "seminar_isco08", "seminar_working_class", "seminar_comment", "seminar_coder"];
+    var lines = [head.join(",")];
+    V.pairs.forEach(function (p) {
+      var s = p.students || {};
+      lines.push([p.id, p.name, p.party, p.group,
+        clean("occupation", p.teacher.occupation), clean("isco08", p.teacher.isco08), wcOf(p.teacher), clean("comment", p.teacher.comment),
+        clean("occupation", s.occupation), clean("isco08", s.isco08), wcOf(s), clean("comment", s.comment), clean("coder", s.coder),
+        p.students ? (wcOf(p.teacher) === wcOf(s) ? "1" : "0") : "",
+        p.seminar ? p.seminar.party : "", clean("occupation", p.seminar && p.seminar.occupation), clean("isco08", p.seminar && p.seminar.isco08),
+        wcOf(p.seminar), clean("comment", p.seminar && p.seminar.comment), clean("coder", p.seminar && p.seminar.coder)].map(csvCell).join(","));
+    });
+    var blob = new Blob(["﻿" + lines.join("\r\n") + "\r\n"], { type: "text/csv;charset=utf-8" });
+    var url = URL.createObjectURL(blob), a = document.createElement("a");
+    a.href = url;
+    a.download = "validation_comparison.csv";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(function () { URL.revokeObjectURL(url); }, 2000);
+  });
 
   function restoreDrafts() {
     var d = readDrafts(), n = 0;
@@ -935,13 +1282,13 @@
   form.addEventListener("submit", function (e) {
     e.preventDefault();
     var sg = $("sg").value, pa = $("pa").value, code = $("code").value.trim().toUpperCase(), me = clean("coder", $("me").value).slice(0, 12);
-    var teacher = sg === "TEACHER", missing = [];
+    var teacher = sg === "TEACHER" || sg === "VALIDATION", missing = [];
     if (!sg) missing.push("seminar group");
     if (!pa && !teacher) missing.push("party");
     if (!me) missing.push("your initials");
     if (missing.length) { err.textContent = "Please fill in: " + missing.join(", ") + "."; return; }
     saveLogin({ sg: sg, pa: teacher ? "" : pa, code: code, me: me });
-    openSheet(teacher ? "TEACHER" : sg + "_" + pa, code, me, false);
+    openSheet(teacher ? sg : sg + "_" + pa, code, me, false);
   });
 
   $("change").addEventListener("click", function () {
@@ -1027,15 +1374,24 @@
     openBtn.disabled = true;
     err.textContent = "The coding sheet is not open yet.";
   }
+  function openRules() {
+    if (location.hash === "#rules" && $("rules")) {
+      $("rules").open = true;
+      $("rules").scrollIntoView({ block: "start" });
+    }
+  }
+  openRules();
+  window.addEventListener("hashchange", openRules);
+
   var saved = readLogin();
   if (saved.sg) $("sg").value = saved.sg;
   if (saved.pa) $("pa").value = saved.pa;
   if (saved.code) $("code").value = saved.code;
   if (saved.me) $("me").value = saved.me;
-  function syncParty() { $("pawrap").hidden = $("sg").value === "TEACHER"; }
+  function syncParty() { $("pawrap").hidden = $("sg").value === "TEACHER" || $("sg").value === "VALIDATION"; }
   $("sg").addEventListener("change", syncParty);
   syncParty();
-  var savedGroup = saved.sg === "TEACHER" ? "TEACHER" : (saved.sg && saved.pa ? saved.sg + "_" + saved.pa : "");
+  var savedGroup = saved.sg === "TEACHER" || saved.sg === "VALIDATION" ? saved.sg : (saved.sg && saved.pa ? saved.sg + "_" + saved.pa : "");
   if (ENDPOINT && savedGroup && saved.me) openSheet(savedGroup, saved.code || "", saved.me, true);
 })();
 </script>

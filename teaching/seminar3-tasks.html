@@ -1,0 +1,953 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Seminar 3 worksheet</title>
+<style>
+  :root {
+    --ink: #1b1b1b;
+    --muted: #5e5e5e;
+    --bg: #ffffff;
+    --panel: #f7f7f5;
+    --line: #dfdfd9;
+    --accent: #2f6db5;
+    --accent-soft: #e8f0f9;
+    --ok: #2d6a4f;
+    --ok-soft: #e6f2ec;
+    --warn: #8a5a00;
+    --warn-line: #d9a321;
+    --warn-soft: #fdf5e3;
+    --bad: #b3261e;
+    --bad-soft: #fcebea;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ink: #e9e9e6; --muted: #a3a3a0; --bg: #16181a; --panel: #1e2124;
+      --line: #32363a; --accent: #7aa9e0; --accent-soft: #23303f; --ok: #74c69d; --ok-soft: #1b2e25;
+      --warn: #e3b341; --warn-line: #b8891d; --warn-soft: #2e2715; --bad: #f2b8b5; --bad-soft: #3a2120;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --ink: #e9e9e6; --muted: #a3a3a0; --bg: #16181a; --panel: #1e2124;
+    --line: #32363a; --accent: #7aa9e0; --accent-soft: #23303f; --ok: #74c69d; --ok-soft: #1b2e25;
+    --warn: #e3b341; --warn-line: #b8891d; --warn-soft: #2e2715; --bad: #f2b8b5; --bad-soft: #3a2120;
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0; background: var(--bg); color: var(--ink);
+    font: 16px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  [hidden] { display: none !important; }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 48px 16px 0; }
+  .wide { max-width: 1040px; }
+  h1 { font-family: Georgia, "Times New Roman", serif; font-size: 1.75rem; line-height: 1.25; margin: 0 0 .15em; font-weight: 600; }
+  .sub { color: var(--muted); margin: 0 0 2em; font-size: .95rem; }
+  h2 { font-family: Georgia, "Times New Roman", serif; font-size: 1.2rem; margin: 2.2em 0 .7em; font-weight: 600; }
+  h3 { font-family: Georgia, "Times New Roman", serif; font-size: 1.02rem; margin: 1.8em 0 .6em; font-weight: 600; }
+  p { margin: 0 0 1em; }
+  a { color: var(--accent); }
+  .lede { border-left: 3px solid var(--accent); padding: .1em 0 .1em 1em; color: var(--muted); font-size: .95rem; }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 560px) { .row { grid-template-columns: 1fr; } }
+  label.field { display: block; font-size: .88rem; color: var(--muted); margin-bottom: .35em; }
+  label.field small { display: block; font-size: .8rem; }
+  input, select, textarea {
+    width: 100%; padding: 10px 12px; font: inherit; font-size: .95rem; color: var(--ink);
+    background: var(--bg); border: 1px solid var(--line); border-radius: 8px;
+  }
+  textarea { resize: vertical; line-height: 1.5; overflow: hidden; }
+  input:focus, select:focus, textarea:focus { outline: 2px solid var(--accent); outline-offset: 1px; border-color: var(--accent); }
+  input.code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; letter-spacing: .08em; text-transform: uppercase; }
+  button {
+    font: inherit; font-weight: 600; padding: 12px 24px; border-radius: 8px; cursor: pointer;
+    border: 1px solid var(--accent); background: var(--accent); color: #fff;
+  }
+  button:hover { filter: brightness(1.08); }
+  button:disabled { opacity: .55; cursor: default; filter: none; }
+  button.ghost { background: transparent; color: var(--accent); }
+  button.small { padding: 6px 13px; font-size: .86rem; }
+  button.link { background: none; border: 0; padding: 0; color: var(--accent); font-weight: 500; text-decoration: underline; font-size: inherit; }
+  button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .actions { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; margin-top: 1.2em; }
+  .err { color: var(--bad); font-size: .9rem; margin: .8em 0 0; min-height: 1.4em; }
+  .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 18px 20px 14px; }
+  .panel .row + .row { margin-top: 14px; }
+
+  .bar { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 14px; margin: 2.4em 0 .3em; }
+  .bar h2 { margin: 0; }
+  .bar .who { color: var(--muted); font-size: .92rem; }
+  .tools { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; padding: 6px 0 4px; }
+  .status { font-size: .86rem; color: var(--muted); }
+  .status::before { content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 7px; background: var(--muted); vertical-align: 1px; }
+  .status.ok::before { background: var(--ok); }
+  .status.pending::before { background: var(--warn-line); }
+  .status.bad { color: var(--bad); }
+  .status.bad::before { background: var(--bad); }
+
+  .q { margin: 0 0 1.6em; }
+  .q .qtext { font-weight: 600; margin: 0 0 .5em; white-space: pre-wrap; }
+  .q .qtext span { color: var(--muted); font-weight: 500; margin-right: .4em; }
+  .q textarea { min-height: 7.5em; }
+  .q .mini, .member .mini { font-size: .82rem; color: var(--muted); margin: .3em 0 0; min-height: 1.2em; }
+  .mini.pending { color: var(--warn); }
+  .waiting { color: var(--muted); background: var(--panel); border: 1px dashed var(--line); border-radius: 10px; padding: 14px 18px; }
+
+  .member { border: 1px solid var(--line); border-radius: 10px; padding: 16px 20px 14px; }
+  .member .name { font-weight: 600; font-size: 1.05rem; }
+  .member .meta { color: var(--muted); font-size: .88rem; margin: 0 0 1em; }
+  .mgrid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 14px 16px; }
+  .mgrid .full { grid-column: 1 / -1; }
+  @media (max-width: 620px) { .mgrid { grid-template-columns: 1fr 1fr; } .mgrid .occ { grid-column: 1 / -1; } }
+  .hint { font-size: .86rem; color: var(--warn); margin: .6em 0 0; min-height: 1.2em; }
+
+  .conflict { border: 1px solid var(--warn-line); background: var(--warn-soft); border-radius: 8px; padding: 10px 14px; margin: .6em 0 0; font-size: .9rem; }
+  .conflict blockquote { margin: .4em 0 .6em; padding: .3em .8em; border-left: 3px solid var(--warn-line); white-space: pre-wrap; }
+  .conflict .actions { margin-top: .4em; }
+
+  .answers { display: grid; gap: 10px; }
+  .ans { border: 1px solid var(--line); border-radius: 8px; padding: 10px 14px; background: var(--bg); }
+  .ans .who { font-size: .82rem; color: var(--muted); font-weight: 600; letter-spacing: .02em; }
+  .ans .text { white-space: pre-wrap; margin: .2em 0 0; font-size: 1.02rem; }
+  .ans.empty .text { color: var(--muted); font-style: italic; }
+  .seg { display: inline-flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+  .seg button { background: transparent; color: var(--ink); border: 0; border-radius: 0; padding: 6px 12px; font-weight: 500; font-size: .86rem; }
+  .seg button + button { border-left: 1px solid var(--line); }
+  .seg button[aria-pressed="true"] { background: var(--accent-soft); font-weight: 600; }
+  .tablewrap { overflow-x: auto; }
+  table.mt { border-collapse: collapse; width: 100%; min-width: 640px; font-size: .9rem; }
+  table.mt th, table.mt td { border-bottom: 1px solid var(--line); padding: 7px 9px; text-align: left; vertical-align: top; }
+  table.mt thead th { background: var(--panel); font-weight: 600; }
+  .pill { display: inline-block; font-size: .78rem; font-weight: 600; border-radius: 99px; padding: 1px 9px; }
+  .pill.done { background: var(--ok-soft); color: var(--ok); }
+  .pill.todo { background: var(--panel); color: var(--muted); border: 1px solid var(--line); }
+  .pill.partial { background: var(--warn-soft); color: var(--warn); }
+
+  .foot { max-width: 760px; margin: 3.5em auto 0; padding: 18px 16px 48px; border-top: 1px solid var(--line); color: var(--muted); font-size: .84rem; }
+  @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+</style>
+</head>
+<body>
+<main>
+<div class="wrap">
+  <h1>Seminar 3: Party Worksheet</h1>
+  <p class="sub">Voters, Representatives, and Political Decision Making in Comparative Perspective &middot; Seminar 3</p>
+
+  <p class="lede">At the seminar your party prepares short answers to the questions below, for the discussion with the whole group, and codes one more member of the Riksdag: a member that another party coded before. Everything you type is saved for your whole party a few seconds after you stop typing.</p>
+
+  <form class="panel" id="login" novalidate>
+    <div class="row">
+      <div>
+        <label class="field" for="sg">Seminar group</label>
+        <select id="sg">
+          <option value="">Choose</option>
+          <option value="SG1">Seminar group 1</option>
+          <option value="SG2">Seminar group 2</option>
+          <option value="TEACHER">Course teacher: all answers</option>
+        </select>
+      </div>
+      <div id="pawrap">
+        <label class="field" for="pa">Party</label>
+        <select id="pa">
+          <option value="">Choose</option>
+          <option value="P1">Party 1</option>
+          <option value="P2">Party 2</option>
+          <option value="P3">Party 3</option>
+          <option value="P4">Party 4</option>
+          <option value="P5">Party 5</option>
+        </select>
+      </div>
+    </div>
+    <div class="row">
+      <div>
+        <label class="field" for="code">Party code <small>the same code as for the coding sheet</small></label>
+        <input type="text" id="code" class="code" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="20" placeholder="6 characters">
+      </div>
+      <div>
+        <label class="field" for="me">Your initials <small>so your party sees who saved what</small></label>
+        <input type="text" id="me" autocomplete="off" spellcheck="false" maxlength="12" placeholder="e.g. AB">
+      </div>
+    </div>
+    <div class="actions"><button type="submit" id="open">Open our worksheet</button></div>
+    <p class="err" id="err" role="alert"></p>
+  </form>
+</div>
+
+<section class="wrap" id="work" hidden aria-labelledby="wtitle">
+  <div class="bar">
+    <h2 id="wtitle">Your party</h2>
+    <span class="who" id="who"></span>
+    <button type="button" class="link" id="change">Change</button>
+  </div>
+  <div class="tools">
+    <button type="button" class="ghost small" id="refresh">Refresh</button>
+    <span class="status" id="status" aria-live="polite"></span>
+  </div>
+
+  <h2>Questions</h2>
+  <p class="waiting" id="noq" hidden>The questions appear here at the seminar. The page checks for them every half minute, or press Refresh.</p>
+  <div id="qs"></div>
+
+  <h2>Code one more member</h2>
+  <p>Another party coded this member before. Code it again on your own, without asking them, by the same <a href="seminar3-coding.html#rules" target="_blank" rel="noopener">coding rules</a> as before. Your code goes into the course&rsquo;s reliability check, where we compare it with the other party&rsquo;s code and the teacher&rsquo;s.</p>
+  <p class="waiting" id="nomember" hidden>Your member appears here once the teacher has drawn the members for the seminar.</p>
+  <div class="member" id="member" hidden>
+    <div class="name" id="mname"></div>
+    <p class="meta" id="mmeta"></p>
+    <div class="mgrid">
+      <div class="occ">
+        <label class="field" for="m_occupation">Occupation <small>last paid non-elected job before the first paid elected office</small></label>
+        <textarea id="m_occupation" data-f="occupation" rows="2" maxlength="300"></textarea>
+      </div>
+      <div>
+        <label class="field" for="m_isco08">ISCO-08 <small>4 digits</small></label>
+        <input type="text" id="m_isco08" data-f="isco08" inputmode="numeric" maxlength="4" autocomplete="off">
+      </div>
+      <div>
+        <label class="field" for="m_working_class">Working class <small>1 or 0</small></label>
+        <select id="m_working_class" data-f="working_class">
+          <option value="">&ndash;</option>
+          <option value="1">1</option>
+          <option value="0">0</option>
+        </select>
+      </div>
+      <div class="full">
+        <label class="field" for="m_comment">Comment <small>in English: sources, doubts, which rule you used</small></label>
+        <textarea id="m_comment" data-f="comment" rows="2" maxlength="1500"></textarea>
+      </div>
+      <div>
+        <label class="field" for="m_coder">Coder <small>initials</small></label>
+        <input type="text" id="m_coder" data-f="coder" maxlength="40" autocomplete="off">
+      </div>
+    </div>
+    <p class="hint" id="mhint" aria-live="polite"></p>
+    <p class="mini" id="msaved"></p>
+    <div id="mconflict"></div>
+  </div>
+</section>
+
+<section class="wrap wide" id="teacher" hidden aria-labelledby="ttitle">
+  <div class="bar">
+    <h2 id="ttitle">All parties&rsquo; answers</h2>
+    <span class="who" id="twho"></span>
+    <button type="button" class="link" id="tchange">Change</button>
+  </div>
+  <div class="tools">
+    <span class="seg" role="group" aria-label="Show answers from">
+      <button type="button" data-sg="" aria-pressed="true">Both groups</button><button type="button" data-sg="SG1" aria-pressed="false">Seminar group 1</button><button type="button" data-sg="SG2" aria-pressed="false">Seminar group 2</button>
+    </span>
+    <button type="button" class="ghost small" id="trefresh">Refresh</button>
+    <button type="button" class="small" id="tcsv">Download answers (CSV)</button>
+    <span class="status" id="tstatus" aria-live="polite"></span>
+  </div>
+  <div id="tqs"></div>
+  <h2>Members coded at the seminar</h2>
+  <p class="waiting" id="tnomembers" hidden>No members are handed out yet. Draw the validation sample in the coding sheet (Course teacher: validation sample) and the parties get theirs when they open this page.</p>
+  <div class="tablewrap" id="tmwrap"><table class="mt" id="tmembers"></table></div>
+  <p class="sub" style="margin-top:1em">The comparison of these codes with the earlier party&rsquo;s and yours is in the coding sheet: Course teacher: validation sample &gt; Compare with the students.</p>
+</section>
+</main>
+
+<footer class="foot">
+  The answers, the coding and the initials you type are saved in a Google Sheet that belongs to the course teacher, and nothing else is collected. Until a change is saved, this browser also keeps a copy of it, so you do not lose it if the connection drops.
+</footer>
+
+<script>
+(function () {
+  "use strict";
+
+  // Web app URL of the Apps Script attached to the course Google Sheet (ends in /exec).
+  // It is the same URL as in seminar3-coding.html.
+  var ENDPOINT = "https://script.google.com/macros/s/AKfycbx0TWapKH8y6_daMUrwvBlFUaqdU4H3dsbmCmGAVYvMaJ2Ggbet_66UHbKMn6U4v1lZAA/exec";
+
+  var BOOK = "https://www.riksdagen.se/globalassets/03.-dokument-och-lagar/bestall-och-ladda-ner/informationsmaterial-och-bocker/fakta-om-folkvalda-2022-26-web.pdf";
+  var QKEYS = ["q1", "q2", "q3", "q4", "q5"];
+  var FIELDS = ["occupation", "isco08", "working_class", "comment", "coder"];
+  var MAXLEN = { occupation: 300, comment: 1500, coder: 40 };
+  var MAX_ANSWER = 5000;
+  var LOGIN_KEY = "s3tasks-login";
+  var DRAFT_KEY = "s3tasks-draft-";
+  var POLL = 30000, SAVE_AFTER = 1500;
+
+  try {
+    var qs = new URLSearchParams(location.search);
+    if (/^(localhost|127\.0\.0\.1)$/.test(location.hostname) && qs.get("endpoint")) ENDPOINT = qs.get("endpoint");
+  } catch (e) {}
+
+  function $(id) { return document.getElementById(id); }
+  function el(tag, cls, text) {
+    var e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (text !== undefined) e.textContent = text;
+    return e;
+  }
+  function autosize(t) { t.style.height = "auto"; t.style.height = t.scrollHeight + 2 + "px"; }
+  function clock(d) { return d.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" }); }
+  function when(iso) {
+    var d = new Date(iso);
+    if (!iso || isNaN(d.getTime())) return "";
+    if (d.toDateString() === new Date().toDateString()) return "today " + clock(d);
+    return d.toLocaleDateString("en-GB", { day: "numeric", month: "short" }) + " " + clock(d);
+  }
+  function label(g) {
+    if (g === "TEACHER") return "Course teacher";
+    var m = /^SG([12])_P([1-5])$/.exec(g || "");
+    return m ? "Seminar group " + m[1] + ", Party " + m[2] : "your party";
+  }
+
+  // ---------- values ----------
+  function cleanAnswer(v) {
+    var s = v === null || v === undefined ? "" : String(v);
+    return s.replace(/\r\n?/g, "\n").replace(/[\u0000-\u0009\u000b-\u001f\u007f]/g, " ").trim().slice(0, MAX_ANSWER);
+  }
+  function clean(f, v) {
+    var s = v === null || v === undefined ? "" : String(v);
+    if (f === "isco08") return s.replace(/\D/g, "").slice(0, 4);
+    if (f === "working_class") { s = s.trim(); return s === "0" || s === "1" ? s : ""; }
+    if (f === "comment") s = s.replace(/\r\n?/g, "\n").replace(/[\u0000-\u0009\u000b-\u001f\u007f]/g, " ");
+    else s = s.replace(/[\u0000-\u001f\u007f]/g, " ");
+    return s.trim().slice(0, MAXLEN[f] || 300);
+  }
+  function pick(o) {
+    var r = {};
+    FIELDS.forEach(function (f) { r[f] = o && o[f] !== undefined && o[f] !== null ? String(o[f]) : ""; });
+    return r;
+  }
+  function same(a, b) { return FIELDS.every(function (f) { return clean(f, a && a[f]) === clean(f, b && b[f]); }); }
+  function hint(v) {
+    var occ = clean("occupation", v.occupation), isco = clean("isco08", v.isco08),
+        wc = clean("working_class", v.working_class), com = clean("comment", v.comment);
+    if (/^student\b/i.test(occ) && (isco || wc)) return "For a student, leave ISCO and working class empty.";
+    if (!occ && (isco || wc)) return "Fill in the occupation, or leave ISCO and working class empty and write “no job stated” in the comment.";
+    if (isco && wc && !com) {
+      var d = isco.charAt(0);
+      if ("456789".indexOf(d) >= 0 && wc === "0") return "ISCO " + d + " usually means working class 1. If 0 is right, say why in the comment.";
+      if ("0123".indexOf(d) >= 0 && wc === "1") return "ISCO " + d + " usually means working class 0. If 1 is right (for example a trade union employee), say why in the comment.";
+    }
+    return "";
+  }
+  function state(v) {
+    var occ = clean("occupation", v.occupation), isco = clean("isco08", v.isco08),
+        wc = clean("working_class", v.working_class), com = clean("comment", v.comment);
+    if (!occ && !isco && !wc && !com) return "todo";
+    if (hint(v)) return "partial";
+    if (/^student\b/i.test(occ)) return "done";
+    if (!occ) return com ? "done" : "partial";
+    return isco && wc ? "done" : "partial";
+  }
+
+  // ---------- server ----------
+  function call(url, opts, ms) {
+    var ctl = typeof AbortController === "function" ? new AbortController() : null;
+    var timer = ctl ? setTimeout(function () { ctl.abort(); }, ms) : null;
+    if (ctl) opts.signal = ctl.signal;
+    return fetch(url, opts).then(function (res) {
+      if (!res.ok) throw new Error("http_" + res.status);
+      return res.json();
+    }).then(function (data) {
+      if (timer) clearTimeout(timer);
+      if (!data || data.ok !== true) throw new Error((data && data.error) || "bad_response");
+      return data;
+    }, function (err) {
+      if (timer) clearTimeout(timer);
+      throw err;
+    });
+  }
+  function get(params) {
+    var q = Object.keys(params).map(function (k) { return k + "=" + encodeURIComponent(params[k]); }).join("&");
+    return call(ENDPOINT + "?" + q, { method: "GET", cache: "no-store" }, 25000);
+  }
+  function post(body, keepalive) {
+    var opts = { method: "POST", body: JSON.stringify(body) };
+    if (keepalive) opts.keepalive = true;
+    return call(ENDPOINT, opts, 30000);
+  }
+  function explain(err) {
+    var m = String((err && err.message) || err);
+    if (m === "wrong_code") return "That code does not match " + label(S.pendingGroup || S.group) + ". Use the code your party received in Canvas.";
+    if (m === "bad_group") return "Choose your seminar group and party.";
+    if (m === "busy") return "The sheet is busy. Try again in a moment.";
+    if (m === "unknown_action") return "The course sheet does not know this page yet. The teacher needs to update the Apps Script.";
+    if (m === "AbortError" || /abort|network|fetch|load failed|http_/i.test(m)) return "Could not reach the course sheet. Check your connection and try again in a minute.";
+    return "Something went wrong (" + m + "). Try again in a minute, and tell your teacher if it keeps happening.";
+  }
+
+  // ---------- state ----------
+  var S = {
+    group: "", code: "", me: "", pendingGroup: "", epoch: 0,
+    q: {},          // q1..q5: { key, text, box, mini, conflict, server, sending }
+    order: [],
+    m: null,        // { id, server, sending, conflictWith }
+    extra: {},      // questions to show although they have no text: this browser holds a draft for them
+    saving: false, again: false, timer: null, failures: 0, poll: null, lastSync: null
+  };
+
+  // ---------- drafts kept in this browser ----------
+  function readDrafts() {
+    try { return JSON.parse(localStorage.getItem(DRAFT_KEY + S.group) || "{}") || {}; } catch (e) { return {}; }
+  }
+  function writeDrafts(d) {
+    try {
+      if (Object.keys(d).length) localStorage.setItem(DRAFT_KEY + S.group, JSON.stringify(d));
+      else localStorage.removeItem(DRAFT_KEY + S.group);
+    } catch (e) {}
+  }
+  function keepDrafts() {
+    var d = {};
+    S.order.forEach(function (k) {
+      var q = S.q[k];
+      if (cleanAnswer(q.box.value) !== cleanAnswer(q.server)) d[k] = { base: q.server, local: q.box.value };
+    });
+    if (S.m && !same(memberLocal(), S.m.server)) d.member = { id: S.m.id, base: pick(S.m.server), local: memberLocal() };
+    writeDrafts(d);
+  }
+
+  // ---------- questions ----------
+  function qDirty(q) { return cleanAnswer(q.box.value) !== cleanAnswer(q.server); }
+
+  function renderQuestions(questions, answers) {
+    var text = {};
+    (questions || []).forEach(function (x) { if (QKEYS.indexOf(x.q) >= 0) text[x.q] = x.text; });
+    answers = answers || {};
+    // A question shows when it has text, or when the party already answered it.
+    var keys = QKEYS.filter(function (k) { return text[k] || cleanAnswer(answers[k]) || (S.q[k] && qDirty(S.q[k])) || S.extra[k]; });
+    var wrap = $("qs");
+    if (keys.join() !== S.order.join()) {
+      var old = S.q;
+      S.q = {};
+      wrap.textContent = "";
+      keys.forEach(function (k, i) {
+        var q = old[k] || makeQuestion(k);
+        S.q[k] = q;
+        wrap.appendChild(q.node);
+      });
+      S.order = keys;
+    }
+    keys.forEach(function (k, i) {
+      var q = S.q[k];
+      q.num.textContent = "Question " + (i + 1) + ".";
+      q.txt.textContent = text[k] || "(The teacher has taken this question away. Your answer is kept.)";
+      var srv = answers[k] === undefined ? "" : String(answers[k]);
+      // Take a party mate's newer text only into a box with no unsaved typing that nobody is in.
+      // A box with unsaved typing keeps the version it started from, so saving it shows a conflict
+      // instead of overwriting the newer text.
+      if (!qDirty(q) && q.sending === null && q.conflictWith === null && cleanAnswer(q.server) !== cleanAnswer(srv) && document.activeElement !== q.box) {
+        q.box.value = srv;
+        q.server = srv;
+        autosize(q.box);
+      }
+      paintQuestion(q);
+    });
+    $("noq").hidden = keys.length > 0;
+  }
+
+  function makeQuestion(k) {
+    var node = el("div", "q"), p = el("p", "qtext"), num = el("span"), txt = el("span");
+    txt.style.cssText = "color:inherit;font-weight:inherit;margin:0";
+    p.appendChild(num);
+    p.appendChild(txt);
+    var id = "a_" + k;
+    p.id = "t_" + k;
+    var box = el("textarea");
+    box.id = id;
+    box.rows = 4;
+    box.maxLength = MAX_ANSWER;
+    box.setAttribute("aria-labelledby", "t_" + k);
+    box.dataset.q = k;
+    var mini = el("p", "mini"), conflict = el("div");
+    node.appendChild(p);
+    node.appendChild(box);
+    node.appendChild(mini);
+    node.appendChild(conflict);
+    var q = { key: k, node: node, num: num, txt: txt, box: box, mini: mini, conflict: conflict, server: "", sending: null, conflictWith: null };
+    box.addEventListener("input", function () { autosize(box); changed(); paintQuestion(q); });
+    box.addEventListener("blur", function () { if (qDirty(q)) saveSoon(0); });
+    return q;
+  }
+
+  function paintQuestion(q) {
+    var m = q.mini;
+    m.className = "mini";
+    if (q.conflictWith !== null) m.textContent = "";
+    else if (q.sending !== null) m.textContent = "Saving…";
+    else if (qDirty(q)) { m.textContent = "Not saved yet"; m.className = "mini pending"; }
+    else m.textContent = cleanAnswer(q.box.value) ? "Saved" : "";
+  }
+
+  // ---------- member ----------
+  function memberLocal() {
+    var o = {};
+    FIELDS.forEach(function (f) { o[f] = $("m_" + f).value; });
+    return o;
+  }
+  function memberDirty() { return S.m && !same(memberLocal(), S.m.server); }
+
+  function renderMember(m) {
+    var box = $("member");
+    if (!m) {
+      box.hidden = true;
+      $("nomember").hidden = false;
+      S.m = null;
+      return;
+    }
+    $("nomember").hidden = true;
+    box.hidden = false;
+    var fresh = !S.m || String(S.m.id) !== String(m.id);
+    if (fresh) {
+      S.m = { id: String(m.id), server: pick(m), sending: null, conflictWith: null };
+      $("mname").textContent = m.name;
+      var meta = $("mmeta");
+      meta.textContent = [m.party, m.constituency].filter(Boolean).join(" · ") + " · ";
+      var a = el("a", "", "p. " + m.pdf_page);
+      a.href = BOOK + "#page=" + encodeURIComponent(m.pdf_page);
+      a.target = "_blank";
+      a.rel = "noopener";
+      a.title = "Open page " + m.pdf_page + " of the book";
+      meta.appendChild(a);
+      FIELDS.forEach(function (f) { $("m_" + f).value = m[f] || ""; });
+      if (!clean("coder", m.coder)) $("m_coder").value = "";
+    } else if (!memberDirty() && !S.m.sending && !S.m.conflictWith && !same(pick(m), S.m.server)) {
+      var focused = document.activeElement && document.activeElement.closest && document.activeElement.closest("#member");
+      if (!focused) {
+        FIELDS.forEach(function (f) { $("m_" + f).value = m[f] || ""; });
+        S.m.server = pick(m);
+      }
+    }
+    if (fresh || same(pick(m), S.m.server)) {
+      S.m.savedAt = m.saved_at || "";
+      S.m.savedBy = m.saved_by || "";
+    }
+    autosize($("m_occupation"));
+    autosize($("m_comment"));
+    paintMember();
+  }
+
+  function paintMember() {
+    if (!S.m) return;
+    var v = memberLocal();
+    $("mhint").textContent = hint(v);
+    var s = $("msaved");
+    s.className = "mini";
+    if (S.m.conflictWith) s.textContent = "";
+    else if (S.m.sending) s.textContent = "Saving…";
+    else if (memberDirty()) { s.textContent = "Not saved yet"; s.className = "mini pending"; }
+    else if (S.m.savedAt) s.textContent = "Saved " + when(S.m.savedAt) + (S.m.savedBy ? " by " + S.m.savedBy : "") + (state(v) === "done" ? " · done" : "");
+    else s.textContent = "";
+  }
+
+  FIELDS.forEach(function (f) {
+    var input = $("m_" + f);
+    input.addEventListener(f === "working_class" ? "change" : "input", function () {
+      if (f === "occupation" || f === "comment") autosize(input);
+      if (f !== "coder" && !clean("coder", $("m_coder").value) && S.me) $("m_coder").value = S.me;
+      changed();
+      paintMember();
+    });
+    input.addEventListener("blur", function () { if (memberDirty()) saveSoon(0); });
+  });
+
+  // ---------- conflicts ----------
+  function conflictBox(target, theirText, onTheirs, onMine) {
+    target.textContent = "";
+    var c = el("div", "conflict");
+    c.appendChild(el("div", "", "Someone in your party saved a different version first. Nothing was overwritten. Their version:"));
+    c.appendChild(el("blockquote", "", theirText || "(empty)"));
+    var acts = el("div", "actions"), b1 = el("button", "small", "Use theirs"), b2 = el("button", "ghost small", "Keep mine");
+    b1.type = "button";
+    b2.type = "button";
+    b1.addEventListener("click", onTheirs);
+    b2.addEventListener("click", onMine);
+    acts.appendChild(b1);
+    acts.appendChild(b2);
+    c.appendChild(acts);
+    target.appendChild(c);
+  }
+  function memberSummary(v) {
+    return [clean("occupation", v.occupation) || "no occupation", clean("isco08", v.isco08) ? "ISCO " + v.isco08 : "",
+            clean("working_class", v.working_class) ? "working class " + v.working_class : "", clean("comment", v.comment)].filter(Boolean).join(" · ");
+  }
+
+  // ---------- saving ----------
+  function changed() {
+    keepDrafts();
+    saveSoon(SAVE_AFTER);
+    paintStatus();
+  }
+  function saveSoon(ms) {
+    clearTimeout(S.timer);
+    S.timer = setTimeout(flush, ms);
+  }
+  function flush(keepalive) {
+    if (!S.group || S.group === "TEACHER") return Promise.resolve();
+    if (S.saving) { S.again = true; return Promise.resolve(); }
+    var answers = [], member = null;
+    S.order.forEach(function (k) {
+      var q = S.q[k];
+      if (q.conflictWith === null && qDirty(q)) {
+        q.sending = q.box.value;
+        answers.push({ q: k, base: q.server, value: q.box.value });
+      }
+    });
+    if (S.m && !S.m.conflictWith && memberDirty()) {
+      S.m.sending = memberLocal();
+      member = { id: S.m.id, base: S.m.server, values: S.m.sending };
+    }
+    if (!answers.length && !member) { paintStatus(); return Promise.resolve(); }
+    S.saving = true;
+    S.order.forEach(function (k) { paintQuestion(S.q[k]); });
+    paintMember();
+    paintStatus();
+    var epoch = S.epoch;
+    return post({ action: "ssave", group: S.group, code: S.code, me: S.me, answers: answers, member: member }, keepalive).then(function (res) {
+      if (epoch !== S.epoch) return;
+      S.failures = 0;
+      S.lastSync = new Date();
+      (res.answers || []).forEach(function (r) {
+        var q = S.q[r.q];
+        if (!q) return;
+        var sent = q.sending;
+        q.sending = null;
+        if (r.status === "conflict") {
+          q.conflictWith = r.value;
+          conflictBox(q.conflict, r.value, function () {
+            q.server = q.conflictWith; q.conflictWith = null; q.conflict.textContent = "";
+            q.box.value = q.server; autosize(q.box); keepDrafts(); paintQuestion(q); paintStatus();
+          }, function () {
+            q.server = q.conflictWith; q.conflictWith = null; q.conflict.textContent = "";
+            keepDrafts(); paintQuestion(q); saveSoon(0);
+          });
+        } else {
+          q.server = r.value;
+          if (cleanAnswer(q.box.value) !== cleanAnswer(sent)) saveSoon(SAVE_AFTER);  // typed on while saving
+        }
+        paintQuestion(q);
+      });
+      if (res.member && S.m && String(res.member.id) === S.m.id) {
+        var r = res.member, sentM = S.m.sending;
+        S.m.sending = null;
+        if (r.status === "conflict" && r.row) {
+          S.m.conflictWith = pick(r.row);
+          conflictBox($("mconflict"), memberSummary(r.row), function () {
+            S.m.server = S.m.conflictWith; S.m.conflictWith = null; $("mconflict").textContent = "";
+            FIELDS.forEach(function (f) { $("m_" + f).value = S.m.server[f]; });
+            S.m.savedAt = r.row.saved_at; S.m.savedBy = r.row.saved_by;
+            keepDrafts(); paintMember(); paintStatus();
+          }, function () {
+            S.m.server = S.m.conflictWith; S.m.conflictWith = null; $("mconflict").textContent = "";
+            keepDrafts(); paintMember(); saveSoon(0);
+          });
+        } else if (r.row) {
+          S.m.server = pick(r.row);
+          S.m.savedAt = r.row.saved_at;
+          S.m.savedBy = r.row.saved_by;
+          if (!same(memberLocal(), sentM)) saveSoon(SAVE_AFTER);
+        }
+        paintMember();
+      }
+      keepDrafts();
+    }, function (e) {
+      if (epoch !== S.epoch) return;
+      S.order.forEach(function (k) { S.q[k].sending = null; });
+      if (S.m) S.m.sending = null;
+      if (/wrong_code|bad_group/.test(String(e && e.message))) { lockOut(e); return; }
+      S.failures++;
+      S.lastError = e;
+      saveSoon(Math.min(60000, 4000 * Math.pow(2, S.failures - 1)));
+    }).then(function () {
+      if (epoch !== S.epoch) return;
+      S.saving = false;
+      S.order.forEach(function (k) { paintQuestion(S.q[k]); });
+      paintMember();
+      paintStatus();
+      if (S.again) { S.again = false; saveSoon(300); }
+    });
+  }
+
+  function pendingCount() {
+    var n = S.order.filter(function (k) { return qDirty(S.q[k]); }).length;
+    if (memberDirty()) n++;
+    return n;
+  }
+  function conflictCount() {
+    var n = S.order.filter(function (k) { return S.q[k].conflictWith !== null; }).length;
+    if (S.m && S.m.conflictWith) n++;
+    return n;
+  }
+  function paintStatus() {
+    var s = $("status"), n = pendingCount(), c = conflictCount();
+    s.className = "status";
+    if (c) { s.className = "status bad"; s.textContent = c === 1 ? "One box needs your choice below" : c + " boxes need your choice below"; return; }
+    if (S.saving) { s.className = "status pending"; s.textContent = "Saving…"; return; }
+    if (n && S.failures) { s.className = "status bad"; s.textContent = "Not saved: cannot reach the sheet. Your text is kept in this browser and saved when the connection is back."; return; }
+    if (n) { s.className = "status pending"; s.textContent = "Saving in a moment…"; return; }
+    s.className = "status ok";
+    s.textContent = "All changes saved" + (S.lastSync ? " · checked " + clock(S.lastSync) : "");
+  }
+
+  // ---------- opening ----------
+  function lockOut(e) {
+    $("work").hidden = true;
+    $("teacher").hidden = true;
+    $("login").hidden = false;
+    $("err").textContent = explain(e);
+    S.group = "";
+    S.epoch++;
+    stopPoll();
+  }
+
+  function openWork(group, code, me, quiet) {
+    S.pendingGroup = group;
+    $("err").textContent = "";
+    $("open").disabled = true;
+    var req = group === "TEACHER" ? get({ action: "sall", code: code }) : get({ action: "sload", group: group, code: code });
+    return req.then(function (res) {
+      S.group = group; S.code = code; S.me = me; S.epoch++; S.failures = 0;
+      S.lastSync = new Date();
+      $("login").hidden = true;
+      if (group === "TEACHER") {
+        $("work").hidden = true;
+        $("teacher").hidden = false;
+        $("twho").textContent = "signed in as " + me;
+        renderTeacher(res);
+      } else {
+        $("teacher").hidden = true;
+        $("work").hidden = false;
+        $("wtitle").textContent = label(group);
+        $("who").textContent = "writing as " + me;
+        S.q = {}; S.order = []; S.m = null; S.extra = {};
+        var drafts = readDrafts();
+        QKEYS.forEach(function (k) { if (drafts[k] && cleanAnswer(drafts[k].local)) S.extra[k] = true; });
+        $("qs").textContent = "";
+        $("mconflict").textContent = "";
+        renderQuestions(res.questions, res.answers);
+        renderMember(res.member);
+        restoreDrafts();
+        paintStatus();
+      }
+      startPoll();
+      if (!quiet) (group === "TEACHER" ? $("teacher") : $("work")).scrollIntoView({ behavior: "smooth", block: "start" });
+    }, function (e) {
+      $("login").hidden = false;
+      $("err").textContent = explain(e);
+    }).then(function () { $("open").disabled = false; });
+  }
+
+  function restoreDrafts() {
+    var d = readDrafts(), any = false;
+    S.order.forEach(function (k) {
+      var x = d[k], q = S.q[k];
+      if (!x || cleanAnswer(x.local) === cleanAnswer(q.server)) return;
+      q.box.value = x.local;
+      if (cleanAnswer(x.base) !== cleanAnswer(q.server)) {
+        q.conflictWith = q.server;
+        conflictBox(q.conflict, q.server, function () {
+          q.conflictWith = null; q.conflict.textContent = ""; q.box.value = q.server; autosize(q.box); keepDrafts(); paintQuestion(q); paintStatus();
+        }, function () {
+          q.conflictWith = null; q.conflict.textContent = ""; keepDrafts(); paintQuestion(q); saveSoon(0);
+        });
+      }
+      autosize(q.box);
+      any = true;
+    });
+    if (d.member && S.m && String(d.member.id) === S.m.id && !same(d.member.local, S.m.server)) {
+      FIELDS.forEach(function (f) { $("m_" + f).value = d.member.local[f] || ""; });
+      if (!same(d.member.base, S.m.server)) {
+        S.m.conflictWith = pick(S.m.server);
+        conflictBox($("mconflict"), memberSummary(S.m.server), function () {
+          S.m.conflictWith = null; $("mconflict").textContent = ""; FIELDS.forEach(function (f) { $("m_" + f).value = S.m.server[f]; }); keepDrafts(); paintMember(); paintStatus();
+        }, function () {
+          S.m.conflictWith = null; $("mconflict").textContent = ""; keepDrafts(); paintMember(); saveSoon(0);
+        });
+      }
+      any = true;
+    }
+    S.order.forEach(function (k) { paintQuestion(S.q[k]); });
+    paintMember();
+    if (any) saveSoon(500);
+  }
+
+  // ---------- refreshing ----------
+  function refresh() {
+    if (!S.group) return Promise.resolve();
+    var epoch = S.epoch;
+    if (S.group === "TEACHER") {
+      return get({ action: "sall", code: S.code }).then(function (res) {
+        if (epoch !== S.epoch) return;
+        S.lastSync = new Date();
+        renderTeacher(res);
+      }, function (e) {
+        if (/wrong_code|bad_group/.test(String(e && e.message))) lockOut(e);
+        else { $("tstatus").className = "status bad"; $("tstatus").textContent = explain(e); }
+      });
+    }
+    return get({ action: "sload", group: S.group, code: S.code }).then(function (res) {
+      if (epoch !== S.epoch) return;
+      S.lastSync = new Date();
+      if (!S.saving) S.failures = 0;
+      renderQuestions(res.questions, res.answers);
+      renderMember(res.member);
+      paintStatus();
+    }, function (e) {
+      if (/wrong_code|bad_group/.test(String(e && e.message))) lockOut(e);
+    });
+  }
+  function startPoll() {
+    stopPoll();
+    S.poll = setInterval(function () { if (!document.hidden) refresh(); }, POLL);
+  }
+  function stopPoll() { if (S.poll) clearInterval(S.poll); S.poll = null; }
+  document.addEventListener("visibilitychange", function () {
+    if (!document.hidden && S.group) refresh();
+    else if (document.hidden && pendingCount()) flush(true);
+  });
+  window.addEventListener("beforeunload", function (ev) {
+    if (S.group && S.group !== "TEACHER" && pendingCount()) {
+      flush(true);
+      ev.preventDefault();
+      ev.returnValue = "";
+    }
+  });
+  $("refresh").addEventListener("click", function () {
+    var b = this;
+    b.disabled = true;
+    flush().then(refresh).then(function () { b.disabled = false; });
+  });
+
+  // ---------- teacher view ----------
+  var T = { res: null, sg: "" };
+  function inSg(g) { return !T.sg || String(g || "").indexOf(T.sg + "_") === 0; }
+  Array.prototype.forEach.call(document.querySelectorAll(".seg [data-sg]"), function (b) {
+    b.addEventListener("click", function () {
+      T.sg = b.dataset.sg;
+      Array.prototype.forEach.call(document.querySelectorAll(".seg [data-sg]"), function (x) { x.setAttribute("aria-pressed", String(x === b)); });
+      if (T.res) renderTeacher(T.res);
+    });
+  });
+  function renderTeacher(res) {
+    T.res = res;
+    var text = {};
+    (res.questions || []).forEach(function (x) { text[x.q] = x.text; });
+    var answers = (res.answers || []).filter(function (a) { return inSg(a.group); });
+    var keys = QKEYS.filter(function (k) { return text[k] || answers.some(function (a) { return cleanAnswer(a[k]); }); });
+    var wrap = $("tqs");
+    wrap.textContent = "";
+    if (!keys.length) wrap.appendChild(el("p", "waiting", "No questions yet. Type them in the “questions” tab of the Google Sheet (column “question”, rows q1 to q5); they show here and on the parties’ pages within half a minute."));
+    keys.forEach(function (k, i) {
+      wrap.appendChild(el("h3", "", "Question " + (i + 1) + ". " + (text[k] || "(no longer in the questions tab)")));
+      var list = el("div", "answers");
+      answers.forEach(function (a) {
+        var v = cleanAnswer(a[k]), box = el("div", "ans" + (v ? "" : " empty"));
+        box.appendChild(el("div", "who", label(a.group)));
+        box.appendChild(el("p", "text", v || "No answer yet"));
+        list.appendChild(box);
+      });
+      wrap.appendChild(list);
+    });
+    var t = $("tmembers"), ms = (res.members || []).filter(function (m) { return inSg(m.seminar_party); });
+    t.textContent = "";
+    $("tnomembers").hidden = ms.length > 0;
+    $("tmwrap").hidden = !ms.length;
+    if (ms.length) {
+      var h = el("thead"), hr = el("tr");
+      ["Party at the seminar", "Member", "Coded before by", "Their code at the seminar", "Status"].forEach(function (x) { hr.appendChild(el("th", "", x)); });
+      h.appendChild(hr);
+      t.appendChild(h);
+      var b = el("tbody");
+      ms.slice().sort(function (x, y) { return x.seminar_party < y.seminar_party ? -1 : 1; }).forEach(function (m) {
+        var tr = el("tr"), st = state(m);
+        tr.appendChild(el("td", "", label(m.seminar_party)));
+        var td = el("td");
+        td.appendChild(document.createTextNode(m.name + " (" + m.party + ")"));
+        tr.appendChild(td);
+        tr.appendChild(el("td", "", label(m.coded_before_by)));
+        tr.appendChild(el("td", "", st === "todo" ? "–" : memberSummary(m)));
+        var sc = el("td"), pill = el("span", "pill " + st, st === "done" ? "Done" : st === "todo" ? "Not started" : "Started");
+        sc.appendChild(pill);
+        if (m.saved_at) sc.appendChild(el("div", "mini", when(m.saved_at) + (m.saved_by ? " · " + m.saved_by : "")));
+        tr.appendChild(sc);
+        b.appendChild(tr);
+      });
+      t.appendChild(b);
+    }
+    var s = $("tstatus");
+    s.className = "status ok";
+    s.textContent = "Checked " + clock(new Date()) + " · updates every half minute";
+  }
+  $("trefresh").addEventListener("click", function () { refresh(); });
+  function csvCell(v) {
+    var s = v === null || v === undefined ? "" : String(v);
+    if (/^[=+\-@\t\r]/.test(s)) s = "'" + s;
+    return /[",\r\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+  }
+  $("tcsv").addEventListener("click", function () {
+    if (!T.res) return;
+    var text = {};
+    (T.res.questions || []).forEach(function (x) { text[x.q] = x.text; });
+    var head = ["party"].concat(QKEYS.map(function (k, i) { return "Q" + (i + 1) + (text[k] ? ": " + text[k] : ""); }), ["last saved (UTC)", "saved by"]);
+    var lines = [head.map(csvCell).join(",")];
+    (T.res.answers || []).forEach(function (a) {
+      lines.push([label(a.group)].concat(QKEYS.map(function (k) { return cleanAnswer(a[k]); }), [a.saved_at || "", a.saved_by || ""]).map(csvCell).join(","));
+    });
+    var blob = new Blob(["﻿" + lines.join("\r\n") + "\r\n"], { type: "text/csv;charset=utf-8" });
+    var url = URL.createObjectURL(blob), a = document.createElement("a");
+    a.href = url;
+    a.download = "seminar3_answers.csv";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(function () { URL.revokeObjectURL(url); }, 2000);
+  });
+
+  // ---------- login ----------
+  function syncParty() {
+    var t = $("sg").value === "TEACHER";
+    $("pawrap").hidden = t;
+    $("code").type = t ? "password" : "text";   // keeps the teacher's code off the projector
+  }
+  $("sg").addEventListener("change", syncParty);
+  $("login").addEventListener("submit", function (ev) {
+    ev.preventDefault();
+    var sg = $("sg").value, pa = $("pa").value, code = $("code").value.trim().toUpperCase(), me = $("me").value.trim().toUpperCase();
+    var teacher = sg === "TEACHER", missing = [];
+    if (!sg) missing.push("seminar group");
+    if (!teacher && !pa) missing.push("party");
+    if (!code) missing.push("code");
+    if (!me) missing.push("initials");
+    if (missing.length) { $("err").textContent = "Fill in your " + missing.join(", ") + "."; return; }
+    try {
+      // A party's code is kept for next time; the teacher's is not, since this may be a shared computer.
+      localStorage.setItem(LOGIN_KEY, JSON.stringify({ sg: sg, pa: pa, code: teacher ? "" : code, me: me }));
+    } catch (e) {}
+    openWork(teacher ? "TEACHER" : sg + "_" + pa, code, me, false);
+  });
+  function change() {
+    flush();
+    stopPoll();
+    S.group = "";
+    S.epoch++;
+    $("work").hidden = true;
+    $("teacher").hidden = true;
+    $("login").hidden = false;
+    $("code").value = "";
+    $("code").focus();
+  }
+  $("change").addEventListener("click", change);
+  $("tchange").addEventListener("click", change);
+
+  var saved = {};
+  try { saved = JSON.parse(localStorage.getItem(LOGIN_KEY) || "{}") || {}; } catch (e) {}
+  if (saved.sg) $("sg").value = saved.sg;
+  if (saved.pa) $("pa").value = saved.pa;
+  if (saved.me) $("me").value = saved.me;
+  if (saved.code) $("code").value = saved.code;
+  syncParty();
+  if (saved.sg && saved.sg !== "TEACHER" && saved.pa && saved.code && saved.me) openWork(saved.sg + "_" + saved.pa, saved.code, saved.me, true);
+})();
+</script>
+</body>
+</html>
