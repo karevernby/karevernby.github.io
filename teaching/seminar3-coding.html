@@ -997,9 +997,12 @@
       if (res.defaultN) $("vn").value = String(Math.min(res.defaultN, pool.rows || res.defaultN));
     } else if (isV) {
       var m = res.meta || {};
-      $("vmeta").textContent = S.rows.length + " members, " + (m.how || "drawn") +
+      var sem = res.seminarRows || 0;
+      $("vmeta").textContent = (S.rows.length + sem) + " members, " + (m.how || "drawn") +
         (m.drawn_at ? " on " + new Date(m.drawn_at).toLocaleString("en-GB", { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" }) : "") +
-        (m.seed ? " (seed " + m.seed + ")" : "") + ". The students’ codes stay hidden until you press Compare with the students.";
+        (m.seed ? " (seed " + m.seed + ")" : "") + "." +
+        (sem ? " The " + sem + " that parties code at the seminar are left out, so " + S.rows.length + " are yours to code." : "") +
+        " The students’ codes stay hidden until you press Compare with the students.";
     } else if (!S.rows.length) {
       err.textContent = "No members found for " + label(group) + ". Tell your teacher.";
     }
@@ -1140,7 +1143,7 @@
   function renderCompare(pairs) {
     renderSeminar(pairs);
     var both = pairs.filter(function (p) { return p.students && state(p.teacher) !== "todo"; });
-    var untouched = pairs.filter(function (p) { return p.students && state(p.teacher) === "todo"; }).length;
+    var untouched = pairs.filter(function (p) { return p.students && !p.seminar && state(p.teacher) === "todo"; }).length;
     var wc = both.map(function (p) { return [wcOf(p.teacher), wcOf(p.students)]; });
     var agree = wc.filter(function (x) { return x[0] === x[1]; }).length;
     var coded = wc.filter(function (x) { return x[0] !== "" && x[1] !== ""; });
