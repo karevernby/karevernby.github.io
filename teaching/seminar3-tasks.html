@@ -130,6 +130,8 @@
 
   .foot { max-width: 760px; margin: 3.5em auto 0; padding: 18px 16px 48px; border-top: 1px solid var(--line); color: var(--muted); font-size: .84rem; }
   @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+  label.tick { display: flex; gap: .6rem; align-items: flex-start; font-weight: 600; cursor: pointer; }
+  label.tick input { width: 1.15rem; height: 1.15rem; margin-top: .2rem; flex: none; }
 </style>
 </head>
 <body>
@@ -229,6 +231,12 @@
     <p class="mini" id="msaved"></p>
     <div id="mconflict"></div>
   </div>
+
+  <h2 id="q2title" hidden>After the coding</h2>
+  <div id="qs2"></div>
+
+  <h2>The research note</h2>
+  <div id="credit"></div>
 </section>
 
 <section class="wrap wide" id="teacher" hidden aria-labelledby="ttitle">
@@ -267,6 +275,8 @@
 
   var BOOK = "https://www.riksdagen.se/globalassets/03.-dokument-och-lagar/bestall-och-ladda-ner/informationsmaterial-och-bocker/fakta-om-folkvalda-2022-26-web.pdf";
   var QKEYS = ["q1", "q2", "q3", "q4", "q5"];
+  var CREDIT = "credit";   // the tick box about being listed on the research note
+  var BEFORE_CODING = 3;   // questions 1 to 3 come before the coding task, the rest after it
   var FIELDS = ["occupation", "isco08", "working_class", "comment", "coder"];
   var MAXLEN = { occupation: 300, comment: 1500, coder: 40 };
   var MAX_ANSWER = 5000;
@@ -416,18 +426,24 @@
     answers = answers || {};
     // A question shows when it has text, or when the party already answered it.
     var keys = QKEYS.filter(function (k) { return text[k] || cleanAnswer(answers[k]) || (S.q[k] && qDirty(S.q[k])) || S.extra[k]; });
-    var wrap = $("qs");
+    var shown = keys.length;
+    keys.push(CREDIT);   // the box about the research note is always there, last
+    // The first questions come before the coding task, the rest after it.
+    var wrap = $("qs"), wrap2 = $("qs2"), wrap3 = $("credit");
     if (keys.join() !== S.order.join()) {
       var old = S.q;
       S.q = {};
       wrap.textContent = "";
+      wrap2.textContent = "";
+      wrap3.textContent = "";
       keys.forEach(function (k, i) {
-        var q = old[k] || makeQuestion(k);
+        var q = old[k] || (k === CREDIT ? makeCredit() : makeQuestion(k));
         S.q[k] = q;
-        wrap.appendChild(q.node);
+        (k === CREDIT ? wrap3 : QKEYS.indexOf(k) < BEFORE_CODING ? wrap : wrap2).appendChild(q.node);
       });
       S.order = keys;
     }
+    $("q2title").hidden = !keys.some(function (k) { return QKEYS.indexOf(k) >= BEFORE_CODING; });
     keys.forEach(function (k, i) {
       var q = S.q[k];
       q.num.textContent = "Question " + (i + 1) + ".";
@@ -443,7 +459,32 @@
       }
       paintQuestion(q);
     });
-    $("noq").hidden = keys.length > 0;
+    $("noq").hidden = shown > 0;
+  }
+
+  // The tick box works like a question whose answer is "yes" or nothing, so it is saved,
+  // kept as a draft and checked for conflicts in the same way as the text answers.
+  function makeCredit() {
+    var node = el("div", "q credit"), lab = el("label", "tick"), cb = el("input"), span = el("span");
+    cb.type = "checkbox";
+    cb.id = "a_" + CREDIT;
+    span.textContent = "Yes, list the members of our party as contributors to the research note that the teacher writes and publishes on his personal website, as a collaborative teaching project between students and teacher.";
+    lab.appendChild(cb);
+    lab.appendChild(span);
+    var note = el("p", "", "If you would rather not be listed yourself, e-mail the teacher individually and your name is left out. Leave the box empty if your party does not want to be listed.");
+    var mini = el("p", "mini"), conflict = el("div");
+    node.appendChild(lab);
+    node.appendChild(note);
+    node.appendChild(mini);
+    node.appendChild(conflict);
+    var box = { style: {}, scrollHeight: 0 };
+    Object.defineProperty(box, "value", {
+      get: function () { return cb.checked ? "yes" : ""; },
+      set: function (v) { cb.checked = cleanAnswer(v) === "yes"; }
+    });
+    var q = { key: CREDIT, node: node, num: el("span"), txt: el("span"), box: box, mini: mini, conflict: conflict, server: "", sending: null, conflictWith: null };
+    cb.addEventListener("change", function () { changed(); paintQuestion(q); saveSoon(0); });
+    return q;
   }
 
   function makeQuestion(k) {
@@ -614,7 +655,7 @@
         q.sending = null;
         if (r.status === "conflict") {
           q.conflictWith = r.value;
-          conflictBox(q.conflict, r.value, function () {
+          conflictBox(q.conflict, r.q === CREDIT ? (r.value === "yes" ? "The box is ticked." : "The box is not ticked.") : r.value, function () {
             q.server = q.conflictWith; q.conflictWith = null; q.conflict.textContent = "";
             q.box.value = q.server; autosize(q.box); keepDrafts(); paintQuestion(q); paintStatus();
           }, function () {
@@ -848,6 +889,11 @@
       });
       wrap.appendChild(list);
     });
+    var yes = answers.filter(function (a) { return cleanAnswer(a[CREDIT]) === "yes"; }).map(function (a) { return label(a.group); });
+    var cl = el("p", "creditline");
+    cl.appendChild(el("strong", "", "Listed as contributors to the research note: "));
+    cl.appendChild(document.createTextNode(yes.length ? yes.join(", ") + " ticked the box (" + yes.length + " of " + answers.length + " parties)." : "no party has ticked the box yet."));
+    wrap.appendChild(cl);
     var t = $("tmembers"), ms = (res.members || []).filter(function (m) { return inSg(m.seminar_party); });
     t.textContent = "";
     $("tnomembers").hidden = ms.length > 0;
@@ -888,10 +934,10 @@
     if (!T.res) return;
     var text = {};
     (T.res.questions || []).forEach(function (x) { text[x.q] = x.text; });
-    var head = ["party"].concat(QKEYS.map(function (k, i) { return "Q" + (i + 1) + (text[k] ? ": " + text[k] : ""); }), ["last saved (UTC)", "saved by"]);
+    var head = ["party"].concat(QKEYS.map(function (k, i) { return "Q" + (i + 1) + (text[k] ? ": " + text[k] : ""); }), ["last saved (UTC)", "saved by", "listed on the research note"]);
     var lines = [head.map(csvCell).join(",")];
     (T.res.answers || []).forEach(function (a) {
-      lines.push([label(a.group)].concat(QKEYS.map(function (k) { return cleanAnswer(a[k]); }), [a.saved_at || "", a.saved_by || ""]).map(csvCell).join(","));
+      lines.push([label(a.group)].concat(QKEYS.map(function (k) { return cleanAnswer(a[k]); }), [a.saved_at || "", a.saved_by || "", cleanAnswer(a[CREDIT]) === "yes" ? "yes" : ""]).map(csvCell).join(","));
     });
     var blob = new Blob(["﻿" + lines.join("\r\n") + "\r\n"], { type: "text/csv;charset=utf-8" });
     var url = URL.createObjectURL(blob), a = document.createElement("a");
